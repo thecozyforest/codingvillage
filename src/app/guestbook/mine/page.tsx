@@ -1,6 +1,8 @@
 import MyBouquet from "@/components/MyBouquet";
 
-export const metadata = { title: "내 꽃다발 | 코딩빌리지" };
+import { village } from "@/lib/village";
+
+export const metadata = { title: `내 꽃다발 | ${village.meta.siteName}` };
 
 export default function Page() {
   return <MyBouquet />;

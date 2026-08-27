@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getBouquet, getGarden, getRoster, isDemo, plantFlower } from "@/lib/gas";
+import { getBouquet, getConfig, getGarden, getRoster, isDemo, plantFlower } from "@/lib/gas";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const action = sp.get("action") ?? "";
 
+  if (action === "config") return NextResponse.json({ ...(await getConfig()), demo: isDemo });
   if (action === "roster") return NextResponse.json({ ...(await getRoster()), demo: isDemo });
   if (action === "garden") return NextResponse.json({ ...(await getGarden()), demo: isDemo });
   if (action === "bouquet") {

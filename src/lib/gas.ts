@@ -81,6 +81,13 @@ function withCounts(): Student[] {
 
 /* ── 바깥에서 쓰는 함수들 ─────────────────── */
 
+export async function getConfig() {
+  if (isDemo) {
+    return { ok: true as const, data: { exhibitionName: '진로탐구아카데미 전시', open: true, requirePin: false } };
+  }
+  return callGas<{ exhibitionName: string; open: boolean; requirePin: boolean }>({ action: 'config' });
+}
+
 export async function getRoster() {
   if (isDemo) return { ok: true as const, data: { total: demoEntries.length, students: withCounts() } };
   return callGas<{ total: number; students: Student[] }>({ action: "roster" });

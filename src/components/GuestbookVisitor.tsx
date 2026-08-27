@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { FLOWERS } from "@/lib/flowers";
+import { village } from "@/lib/village";
 import { FlowerHead } from "./Flower";
 
 type Student = { id: string; name: string; group: string; note?: string; flowers: number };
@@ -78,14 +79,10 @@ export default function GuestbookVisitor() {
             <FlowerHead id={flower} size={108} />
           </div>
           <h1 className="gb-doneTitle">
-            {target?.name}님의 정원에
-            <br />
-            {chosen.name} 한 송이가 피었어요
+            {target?.name}님의 정원에 {chosen.name} 한 송이가 피었어요
           </h1>
           <p className="gb-doneSub">
-            같은 꽃이 <strong>모두의 정원</strong>에도 함께 피었습니다.
-            <br />
-            남겨 주신 글은 전시가 끝난 뒤 {target?.name}님에게 전해집니다.
+            같은 꽃이 <strong>모두의 정원</strong>에도 함께 피었습니다. 남겨 주신 글은 전시가 끝난 뒤 {target?.name}님에게 전해집니다.
           </p>
           <div className="gb-actions">
             <Link className="gb-btn gb-btn--go" href="/guestbook/garden">
@@ -111,13 +108,11 @@ export default function GuestbookVisitor() {
     <div className="gb-wrap">
       <div className="gb-top">
         <Link className="gb-back" href="/">
-          ← 코딩빌리지
+          ← {village.meta.siteName}
         </Link>
         <h1 className="gb-h1">꽃 우체국</h1>
         <p className="gb-sub">
-          오늘 마을에 와 주셔서 고맙습니다.
-          <br />
-          꽃 한 송이를 골라 두고 가 주세요.
+          오늘 마을에 와 주셔서 고맙습니다. 꽃 한 송이를 골라 두고 가 주세요.
         </p>
       </div>
 
@@ -148,6 +143,8 @@ export default function GuestbookVisitor() {
         ) : (
           <div className="gb-grid">
             {students.map((s) => (
+              // 받은 꽃 개수는 일부러 보여 주지 않습니다.
+              // 숫자가 보이면 적게 받은 사람이 드러나고, 고르는 사람의 선택도 그쪽으로 쏠립니다.
               <button
                 key={s.id}
                 className="gb-student"
@@ -157,14 +154,8 @@ export default function GuestbookVisitor() {
                   setStep(1);
                 }}
               >
-                <span className="gb-miniRow" aria-hidden="true">
-                  {Array.from({ length: Math.min(s.flowers, 5) }, (_, i) => (
-                    <FlowerHead key={i} id={FLOWERS[i % FLOWERS.length].id} size={18} />
-                  ))}
-                </span>
                 <span className="gb-studentName">{s.name}</span>
                 {s.group && <span className="gb-studentGroup">{s.group}</span>}
-                <span className="gb-studentCount">받은 꽃 {s.flowers}</span>
               </button>
             ))}
           </div>

@@ -23,6 +23,11 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: clip; /* hidden 으로 바꾸면 지도 안쪽 sticky 요소가 죽습니다 */
+
+  /* 한글은 어절 단위로 끊어야 읽힙니다. 이게 없으면 '환영해 / 요' 처럼 잘립니다. */
+  word-break: keep-all;
+  /* 다만 긴 주소처럼 끊을 데가 없는 건 예외로 끊어 줍니다. */
+  overflow-wrap: break-word;
 }
 
 button {
@@ -138,7 +143,8 @@ button {
   line-height: 1.28;
   margin: 14px 0 10px;
   color: var(--cv-ink);
-  white-space: pre-line;
+  white-space: pre-line; /* village.json 의 \n 으로 줄을 직접 나눌 수도 있습니다 */
+  text-wrap: balance;    /* \n 이 없으면 줄 길이를 알아서 고르게 맞춥니다 */
   letter-spacing: -0.01em;
 }
 
@@ -151,6 +157,7 @@ button {
 }
 
 .cv-lines p {
+  text-wrap: balance; /* 마지막 줄에 한 글자만 남는 것을 막습니다 */
   margin: 2px 0;
 }
 
@@ -365,6 +372,7 @@ button {
 }
 
 .cv-guideList li {
+  text-wrap: balance;
   display: flex;
   gap: 10px;
   align-items: flex-start;
@@ -463,6 +471,7 @@ button {
 }
 
 .cv-sheetName {
+  text-wrap: balance;
   font-family: var(--cv-font-sign);
   font-size: 21px;
   margin: 0;
@@ -486,6 +495,7 @@ button {
 }
 
 .cv-sheetBlurb {
+  text-wrap: pretty;
   font-family: var(--cv-font-hand);
   font-size: 18px;
   color: var(--cv-ink);
@@ -494,6 +504,7 @@ button {
 }
 
 .cv-sheetHowto {
+  text-wrap: pretty;
   font-size: 14px;
   line-height: 1.75;
   color: var(--cv-ink-soft);

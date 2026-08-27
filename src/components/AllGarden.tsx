@@ -1,44 +1,48 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Garden } from "./Garden";
 import { FlowerHead } from "./Flower";
 import { downloadGardenCard } from "@/lib/card";
-import type { Entry } from "@/lib/gardenTypes";
+import { village } from "@/lib/village";
+import type { Entry, Student } from "@/lib/gardenTypes";
 
 type GardenData = {
   total: number;
   studentCount: number;
   latestAt: string;
-  ranking: { name: string; flowers: number }[];
   entries: Entry[];
 };
 
 const POLL_MS = 15000;
+/** 전자칠판은 손을 안 대므로 두 화면이 저절로 번갈아 뜹니다. */
+const MODE_MS = 22000;
 
-/** 전자칠판·태블릿에 띄우는 화면입니다. 손대지 않아도 저절로 새로 고쳐집니다. */
 export default function AllGarden({ board = false }: { board?: boolean }) {
   const [data, setData] = useState<GardenData | null>(null);
+  const [students, setStudents] = useState<Student[]>([]);
   const [demo, setDemo] = useState(false);
   const [err, setErr] = useState("");
   const [tick, setTick] = useState(0);
+  const [mode, setMode] = useState<"all" | "plots">("all");
   const [saving, setSaving] = useState(false);
-  const prevTotal = useRef(0);
 
-  // 태블릿 화면에서는 정원이 무대를 꽉 채워야 합니다.
-  // 무대 크기를 재서 그 비율을 정원에 넘겨 줍니다.
   const stageRef = useRef<HTMLDivElement | null>(null);
   const [aspect, setAspect] = useState(1.8);
 
   const load = useCallback(async () => {
     try {
-      const j = await (await fetch("/api/guestbook?action=garden", { cache: "no-store" })).json();
-      setDemo(!!j.demo);
-      if (j.ok) {
-        setData(j.data);
+      const [g, r] = await Promise.all([
+        fetch("/api/guestbook?action=garden", { cache: "no-store" }).then((x) => x.json()),
+        fetch("/api/guestbook?action=roster", { cache: "no-store" }).then((x) => x.json()),
+      ]);
+      setDemo(!!g.demo);
+      if (g.ok) {
+        setData(g.data);
         setErr("");
-      } else setErr(j.error || "정원을 불러오지 못했어요.");
+      } else setErr(g.error || "정원을 불러오지 못했어요.");
+      if (r.ok) setStudents(r.data.students);
     } catch {
       setErr("연결이 끊겼어요. 다시 시도하는 중이에요…");
     }
@@ -50,15 +54,16 @@ export default function AllGarden({ board = false }: { board?: boolean }) {
     return () => clearInterval(id);
   }, [load]);
 
-  // 최근 방명록을 한 줄씩 번갈아 보여 줍니다.
   useEffect(() => {
     const id = setInterval(() => setTick((t) => t + 1), 5200);
     return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
-    if (data) prevTotal.current = data.total;
-  }, [data]);
+    if (!board) return;
+    const id = setInterval(() => setMode((m) => (m === "all" ? "plots" : "all")), MODE_MS);
+    return () => clearInterval(id);
+  }, [board]);
 
   useEffect(() => {
     const el = stageRef.current;
@@ -79,7 +84,23 @@ export default function AllGarden({ board = false }: { board?: boolean }) {
       window.removeEventListener("resize", measure);
       window.removeEventListener("orientationchange", measure);
     };
-  }, [board]);
+  }, [board, mode]);
+
+  /**
+   * 정원별로 묶습니다. 이름이 아니라 id로 묶어야 동명이인이 섞이지 않습니다.
+   * 정렬은 **이름순**입니다 — 꽃 수로 줄을 세우면 그게 곧 순위표가 됩니다.
+   */
+  const plots = useMemo(() => {
+    const byId = new Map<string, Entry[]>();
+    for (const e of data?.entries ?? []) {
+      const arr = byId.get(e.toId);
+      if (arr) arr.push(e);
+      else byId.set(e.toId, [e]);
+    }
+    return [...students]
+      .sort((a, b) => a.name.localeCompare(b.name, "ko"))
+      .map((s) => ({ student: s, entries: byId.get(s.id) ?? [] }));
+  }, [data, students]);
 
   const recent = data ? [...data.entries].slice(-24).reverse() : [];
   const shown = recent.length ? recent[tick % recent.length] : null;
@@ -90,7 +111,7 @@ export default function AllGarden({ board = false }: { board?: boolean }) {
     try {
       await downloadGardenCard({
         entries: data.entries,
-        exhibitionName: "진로탐구아카데미 전시",
+        exhibitionName: village.meta.exhibition,
         studentCount: data.studentCount,
       });
     } catch (e) {
@@ -105,7 +126,9 @@ export default function AllGarden({ board = false }: { board?: boolean }) {
     return (
       <div className="gb-board">
         <div className="gb-boardHead">
-          <h1 className="gb-boardTitle">모두의 정원</h1>
+          <h1 className="gb-boardTitle">
+            {mode === "all" ? "모두의 꽃밭" : "정원마다 피어난 꽃"}
+          </h1>
           <div className="gb-boardCount">
             {data ? `꽃 ${data.total}송이 · ${data.studentCount}명의 정원` : "부르는 중…"}
           </div>
@@ -116,15 +139,32 @@ export default function AllGarden({ board = false }: { board?: boolean }) {
             <strong>데모 모드</strong> — 구글 시트가 아직 연결되지 않았습니다.
           </div>
         )}
-        {err && <div className="gb-err" style={{ margin: 0 }}>{err}</div>}
+        {err && (
+          <div className="gb-err" style={{ margin: 0 }}>
+            {err}
+          </div>
+        )}
 
         <div className="gb-boardStage" ref={stageRef}>
-          <Garden
-            entries={data?.entries ?? []}
-            width={1200}
-            aspect={aspect}
-            emptyLabel="첫 번째 꽃을 기다리고 있어요"
-          />
+          {mode === "all" ? (
+            <Garden
+              entries={data?.entries ?? []}
+              width={1200}
+              aspect={aspect}
+              emptyLabel="첫 번째 꽃을 기다리고 있어요"
+            />
+          ) : (
+            <div className="gb-plots">
+              {plots.map(({ student, entries }) => (
+                <div className="gb-plot" key={student.id}>
+                  <div className="gb-plotGarden">
+                    <Garden entries={entries} width={280} aspect={1.5} emptyLabel="" />
+                  </div>
+                  <div className="gb-plotName">{student.name}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="gb-ticker">
@@ -148,7 +188,7 @@ export default function AllGarden({ board = false }: { board?: boolean }) {
           ← 꽃 우체국
         </Link>
         <h1 className="gb-h1">모두의 정원</h1>
-        <p className="gb-sub">놓고 가신 꽃이 모두 여기에 함께 핍니다.</p>
+        <p className="gb-sub">놓고 가신 꽃이 저마다의 정원에, 그리고 한 밭에 함께 핍니다.</p>
       </div>
 
       {demo && (
@@ -169,9 +209,39 @@ export default function AllGarden({ board = false }: { board?: boolean }) {
         </div>
       </div>
 
-      <div className="gb-gardenBox">
-        <Garden entries={data?.entries ?? []} width={720} emptyLabel="첫 번째 꽃을 기다리고 있어요" />
+      <div className="gb-segment" role="group" aria-label="보기 방식">
+        <button
+          className="gb-segBtn"
+          aria-pressed={mode === "all"}
+          onClick={() => setMode("all")}
+        >
+          모두의 꽃밭
+        </button>
+        <button
+          className="gb-segBtn"
+          aria-pressed={mode === "plots"}
+          onClick={() => setMode("plots")}
+        >
+          정원별로 보기
+        </button>
       </div>
+
+      {mode === "all" ? (
+        <div className="gb-gardenBox">
+          <Garden entries={data?.entries ?? []} width={720} emptyLabel="첫 번째 꽃을 기다리고 있어요" />
+        </div>
+      ) : (
+        <div className="gb-plots gb-plots--page">
+          {plots.map(({ student, entries }) => (
+            <div className="gb-plot" key={student.id}>
+              <div className="gb-plotGarden">
+                <Garden entries={entries} width={280} aspect={1.5} emptyLabel="" />
+              </div>
+              <div className="gb-plotName">{student.name}</div>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="gb-actions">
         <button className="gb-btn gb-btn--go" onClick={saveCard} disabled={!data?.total || saving}>

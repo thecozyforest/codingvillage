@@ -6,6 +6,8 @@
    ========================================================== */
 
 .gb {
+  overflow-wrap: break-word;
+  word-break: keep-all; /* 한글은 어절 단위로 끊습니다(globals.css 와 같은 이유) */
   --gb-paper: #fbf7f2;
   --gb-card: #ffffff;
   --gb-ink: #43352c;
@@ -52,12 +54,14 @@
 }
 
 .gb-h1 {
+  text-wrap: balance;
   font-family: var(--cv-font-sign);
   font-size: clamp(23px, 6.5vw, 30px);
   margin: 0 0 6px;
 }
 
 .gb-sub {
+  text-wrap: balance;
   margin: 0;
   color: var(--gb-soft);
   font-size: 14px;
@@ -100,6 +104,7 @@
 }
 
 .gb-stepLabel {
+  text-wrap: balance;
   text-align: center;
   font-family: var(--cv-font-sign);
   font-size: 18px;
@@ -107,6 +112,7 @@
 }
 
 .gb-stepHint {
+  text-wrap: balance;
   text-align: center;
   color: var(--gb-soft);
   font-size: 13.5px;
@@ -276,6 +282,7 @@
 }
 
 .gb-previewMsg {
+  text-wrap: pretty;
   font-family: var(--cv-font-hand);
   font-size: 18px;
   line-height: 1.45;
@@ -362,12 +369,14 @@
 }
 
 .gb-doneTitle {
+  text-wrap: balance;
   font-family: var(--cv-font-sign);
   font-size: 22px;
   margin: 0 0 8px;
 }
 
 .gb-doneSub {
+  text-wrap: balance;
   color: var(--gb-soft);
   font-size: 14px;
   line-height: 1.7;
@@ -442,6 +451,7 @@
 }
 
 .gb-noteMsg {
+  text-wrap: pretty;
   font-family: var(--cv-font-hand);
   font-size: 17px;
   line-height: 1.5;
@@ -496,6 +506,7 @@
 }
 
 .gb-boardTitle {
+  text-wrap: balance;
   font-family: var(--cv-font-sign);
   font-size: clamp(24px, 3.4vw, 40px);
   margin: 0;
@@ -557,4 +568,119 @@
   .gb-tickerItem {
     animation: none !important;
   }
+}
+
+/* ── 정원별로 보기 ───────────────────────── */
+
+/* 정렬은 언제나 이름순입니다. 꽃 수로 줄을 세우면 순위표가 되고,
+   적게 받은 아이가 드러납니다. 개수는 어디에도 적지 않습니다. */
+.gb-plots {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+  align-content: start;
+}
+
+.gb-plots--page {
+  position: static;
+  inset: auto;
+  overflow: visible;
+  padding: 0;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+.gb-plot {
+  background: var(--gb-card);
+  border: 1.5px solid var(--gb-line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(90, 70, 52, 0.08);
+}
+
+/* 정원 그림은 칸에 맞춰 들어갑니다(무대 안 SVG 규칙을 덮어씁니다). */
+.gb-plot .gb-gardenSvg {
+  position: static;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gb-plotName {
+  text-wrap: balance;
+  font-family: var(--cv-font-sign);
+  font-size: 15px;
+  text-align: center;
+  padding: 7px 8px 8px;
+  color: var(--gb-ink);
+  border-top: 1px solid var(--gb-line);
+  background: var(--gb-card);
+}
+
+/* ── 보기 전환 ───────────────────────────── */
+
+.gb-segment {
+  display: flex;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 999px;
+  padding: 4px;
+  margin-bottom: 14px;
+}
+
+.gb-segBtn {
+  flex: 1;
+  border: 0;
+  background: none;
+  border-radius: 999px;
+  padding: 9px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--gb-soft);
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.gb-segBtn[aria-pressed="true"] {
+  background: var(--gb-card);
+  color: var(--gb-ink);
+  font-weight: 700;
+  box-shadow: var(--gb-shadow);
+}
+
+/* ── 기타 ─────────────────────────────────── */
+
+.gb-backBtn {
+  display: inline-block;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--gb-soft);
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+.gb-backBtn:hover {
+  color: var(--gb-ink);
+}
+
+.gb-teacherNote {
+  text-wrap: pretty;
+  margin-top: 22px;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--gb-soft);
+}
+
+.gb-teacherNote code {
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 12px;
 }
