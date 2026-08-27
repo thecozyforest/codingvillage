@@ -1,0 +1,562 @@
+/* ==========================================================
+   코딩빌리지 — 색은 전부 이 파일 위쪽 변수에서만 바꿉니다.
+   계절은 .cv-root[data-season="…"] 블록만 갈아끼우면 됩니다.
+   클래스 접두어는 cv- 로 통일합니다.
+   ========================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--cv-paper);
+  color: var(--cv-ink);
+  font-family: var(--cv-font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip; /* hidden 으로 바꾸면 지도 안쪽 sticky 요소가 죽습니다 */
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:root {
+  --cv-font-body: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  --cv-font-sign: "Jua", var(--cv-font-body);
+  --cv-font-hand: "Gaegu", var(--cv-font-body);
+
+  --cv-paper: #fbf6ee;
+  --cv-ink: #4a3a30;
+  --cv-ink-soft: #8a7768;
+  --cv-line: #e3d7c6;
+  --cv-card: #fffdf8;
+
+  --cv-wood: #b5895f;
+  --cv-wood-dark: #8b6743;
+
+  /* 계절이 바꿔 끼우는 값들 — 기본은 봄 */
+  --cv-sky-top: #dff1e8;
+  --cv-sky-bot: #f4f8e8;
+  --cv-grass: #a9d18d;
+  --cv-grass-deep: #86b96b;
+  --cv-hill: #bcdc9f;
+  --cv-road: #efe0c4;
+  --cv-road-edge: #dcc6a1;
+  --cv-accent: #ef9db4;
+  --cv-accent-ink: #a2465f;
+
+  --cv-radius: 18px;
+  --cv-shadow: 0 6px 18px rgba(96, 74, 56, 0.13);
+  --cv-shadow-lift: 0 12px 30px rgba(96, 74, 56, 0.2);
+  --cv-max: 560px;
+}
+
+.cv-root[data-season="여름"] {
+  --cv-sky-top: #cbe9fa;
+  --cv-sky-bot: #e9f6fb;
+  --cv-grass: #8ac96d;
+  --cv-grass-deep: #5fa04a;
+  --cv-hill: #a4d886;
+  --cv-road: #f0e2c6;
+  --cv-road-edge: #d9c19a;
+  --cv-accent: #f3bf4c;
+  --cv-accent-ink: #8a6410;
+}
+
+.cv-root[data-season="가을"] {
+  --cv-sky-top: #fae2ba;
+  --cv-sky-bot: #fdf2de;
+  --cv-grass: #cfae63;
+  --cv-grass-deep: #a8853f;
+  --cv-hill: #dcc07c;
+  --cv-road: #eddcbd;
+  --cv-road-edge: #cfb389;
+  --cv-accent: #e07a45;
+  --cv-accent-ink: #8d3f18;
+}
+
+.cv-root[data-season="겨울"] {
+  --cv-sky-top: #e4edf9;
+  --cv-sky-bot: #f6f9fd;
+  --cv-grass: #e4ebf3;
+  --cv-grass-deep: #c7d4e4;
+  --cv-hill: #eff4fa;
+  --cv-road: #efe9df;
+  --cv-road-edge: #d5cdc0;
+  --cv-accent: #8fb4dd;
+  --cv-accent-ink: #3a5b83;
+}
+
+/* ── 전체 틀 ───────────────────────────────── */
+
+.cv-root {
+  min-height: 100dvh;
+  background: linear-gradient(180deg, var(--cv-sky-top) 0%, var(--cv-sky-bot) 46%, var(--cv-paper) 100%);
+  transition: background 600ms ease;
+}
+
+.cv-wrap {
+  max-width: var(--cv-max);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ── 머리말 ────────────────────────────────── */
+
+.cv-hero {
+  position: relative;
+  padding: 30px 0 8px;
+  text-align: center;
+}
+
+.cv-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--cv-accent-ink);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  padding: 5px 12px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(96, 74, 56, 0.08);
+}
+
+.cv-title {
+  font-family: var(--cv-font-sign);
+  font-size: clamp(28px, 8vw, 38px);
+  line-height: 1.28;
+  margin: 14px 0 10px;
+  color: var(--cv-ink);
+  white-space: pre-line;
+  letter-spacing: -0.01em;
+}
+
+.cv-lines {
+  margin: 0 auto;
+  max-width: 30ch;
+  color: var(--cv-ink-soft);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.cv-lines p {
+  margin: 2px 0;
+}
+
+.cv-heroActions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.cv-btn {
+  border: 0;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 11px 20px;
+  font-family: var(--cv-font-sign);
+  font-size: 15px;
+  background: var(--cv-card);
+  color: var(--cv-ink);
+  box-shadow: var(--cv-shadow);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.cv-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--cv-shadow-lift);
+}
+
+.cv-btn:active {
+  transform: translateY(0);
+}
+
+.cv-btn--go {
+  background: var(--cv-accent);
+  color: #fff;
+}
+
+.cv-root[data-season="가을"] .cv-btn--go,
+.cv-root[data-season="여름"] .cv-btn--go {
+  color: #4a3218;
+}
+
+/* ── 계절 고르기 ───────────────────────────── */
+
+.cv-seasons {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin: 16px 0 4px;
+}
+
+.cv-seasonBtn {
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.62);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--cv-ink-soft);
+  transition: all 160ms ease;
+}
+
+.cv-seasonBtn[aria-pressed="true"] {
+  background: var(--cv-card);
+  color: var(--cv-ink);
+  box-shadow: var(--cv-shadow);
+  font-weight: 700;
+}
+
+.cv-seasonNote {
+  text-align: center;
+  font-family: var(--cv-font-hand);
+  font-size: 14px;
+  color: var(--cv-ink-soft);
+  margin: 6px 0 0;
+}
+
+/* ── 지도 ──────────────────────────────────── */
+
+.cv-map {
+  position: relative;
+  max-width: var(--cv-max);
+  margin: 8px auto 0;
+}
+
+.cv-mapSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 건물들은 지도 위에 얹힌 진짜 버튼입니다(읽기·탭 모두 이쪽이 낫습니다). */
+.cv-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.cv-place {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 27%;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cv-place:disabled {
+  cursor: default;
+}
+
+.cv-placeArt {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  transition: transform 220ms cubic-bezier(0.2, 0.9, 0.3, 1.3);
+  filter: drop-shadow(0 5px 8px rgba(90, 68, 50, 0.22));
+}
+
+.cv-place:hover .cv-placeArt,
+.cv-place:focus-visible .cv-placeArt {
+  transform: translateY(-5px) scale(1.04);
+}
+
+.cv-place:focus-visible {
+  outline: none;
+}
+
+.cv-place:focus-visible .cv-sign {
+  outline: 3px solid var(--cv-accent-ink);
+  outline-offset: 3px;
+}
+
+/* 간판 */
+.cv-sign {
+  font-family: var(--cv-font-sign);
+  font-size: clamp(12px, 3.4vw, 15px);
+  line-height: 1.2;
+  color: #5b4126;
+  background: linear-gradient(180deg, #f6e2c2, #e7cca4);
+  border: 1.5px solid var(--cv-wood-dark);
+  border-radius: 8px;
+  padding: 4px 10px;
+  box-shadow: 0 3px 0 var(--cv-wood-dark), 0 6px 10px rgba(90, 68, 50, 0.16);
+  white-space: nowrap;
+  transition: transform 220ms ease;
+}
+
+.cv-place:hover .cv-sign {
+  transform: translateY(-2px);
+}
+
+.cv-signSoon {
+  background: linear-gradient(180deg, #ece5da, #ddd3c4);
+  color: #8a7768;
+}
+
+/* 「지금 여기」 표시 — 마을 투어 중 현재 위치 */
+.cv-place[data-here="true"] .cv-placeArt {
+  transform: translateY(-6px) scale(1.07);
+}
+
+.cv-here {
+  position: absolute;
+  top: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 22px;
+  animation: cv-bob 1.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes cv-bob {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -6px);
+  }
+}
+
+/* ── 안내 ──────────────────────────────────── */
+
+.cv-guide {
+  margin: 4px auto 0;
+  background: var(--cv-card);
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  padding: 18px 18px 14px;
+  box-shadow: var(--cv-shadow);
+}
+
+.cv-guideTitle {
+  font-family: var(--cv-font-sign);
+  font-size: 17px;
+  margin: 0 0 10px;
+}
+
+.cv-guideList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 9px;
+}
+
+.cv-guideList li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--cv-ink-soft);
+}
+
+.cv-guideIcon {
+  flex: 0 0 auto;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ── 바닥 ──────────────────────────────────── */
+
+.cv-footer {
+  text-align: center;
+  padding: 26px 16px 40px;
+  color: var(--cv-ink-soft);
+}
+
+.cv-footerNote {
+  font-family: var(--cv-font-hand);
+  font-size: 17px;
+  margin: 0 0 6px;
+}
+
+.cv-footerCredit {
+  font-size: 12px;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* ── 건물 안내 카드(아래에서 올라옵니다) ───── */
+
+.cv-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(60, 44, 32, 0.42);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+  animation: cv-fade 200ms ease;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+@keyframes cv-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.cv-sheet {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: min(100%, var(--cv-max));
+  background: var(--cv-card);
+  border-radius: 22px 22px 0 0;
+  box-shadow: 0 -10px 40px rgba(60, 44, 32, 0.28);
+  z-index: 41;
+  padding: 10px 20px calc(22px + env(safe-area-inset-bottom));
+  animation: cv-rise 280ms cubic-bezier(0.2, 0.9, 0.3, 1.05);
+  max-height: 86dvh;
+  overflow-y: auto;
+}
+
+@keyframes cv-rise {
+  from {
+    transform: translate(-50%, 100%);
+  }
+}
+
+.cv-grip {
+  width: 40px;
+  height: 4px;
+  border-radius: 99px;
+  background: var(--cv-line);
+  margin: 4px auto 14px;
+}
+
+.cv-sheetHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cv-sheetArt {
+  width: 62px;
+  height: 62px;
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.cv-sheetName {
+  font-family: var(--cv-font-sign);
+  font-size: 21px;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.cv-chip {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 11.5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--cv-accent);
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.cv-root[data-season="가을"] .cv-chip,
+.cv-root[data-season="여름"] .cv-chip {
+  color: #4a3218;
+}
+
+.cv-sheetBlurb {
+  font-family: var(--cv-font-hand);
+  font-size: 18px;
+  color: var(--cv-ink);
+  margin: 15px 0 8px;
+  line-height: 1.5;
+}
+
+.cv-sheetHowto {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--cv-ink-soft);
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.028);
+  border-radius: 12px;
+}
+
+.cv-sheetActions {
+  display: flex;
+  gap: 8px;
+}
+
+.cv-sheetActions .cv-btn {
+  flex: 1;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cv-btn--ghost {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--cv-line);
+  flex: 0 0 auto !important;
+  padding-inline: 16px;
+}
+
+.cv-soonNote {
+  text-align: center;
+  font-family: var(--cv-font-hand);
+  font-size: 16px;
+  color: var(--cv-ink-soft);
+  padding: 12px 0 4px;
+  margin: 0;
+}
+
+/* ── 화면 낭독기 전용 ─────────────────────── */
+
+.cv-srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── 움직임을 줄이는 설정을 켠 사람 ────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

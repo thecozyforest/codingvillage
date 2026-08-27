@@ -1,0 +1,560 @@
+/* ==========================================================
+   꽃 우체국 — 방명록
+   마을 지도(cv-)와 다른 화면이라 접두어를 gb- 로 나눕니다.
+   행복정원과도 결이 달라야 해서, 이모지 대신 직접 그린 꽃과
+   꽃집 계산대 같은 카드 UI를 씁니다.
+   ========================================================== */
+
+.gb {
+  --gb-paper: #fbf7f2;
+  --gb-card: #ffffff;
+  --gb-ink: #43352c;
+  --gb-soft: #8b7a6c;
+  --gb-line: #ece2d6;
+  --gb-green: #4f8b3d;
+  --gb-green-dark: #3d6f2e;
+  --gb-rose: #c2566f;
+  --gb-sky: #dceaf4;
+  --gb-ground: #cfe0b8;
+  --gb-radius: 16px;
+  --gb-shadow: 0 4px 16px rgba(90, 70, 52, 0.1);
+  --gb-max: 620px;
+
+  min-height: 100dvh;
+  background: var(--gb-paper);
+  color: var(--gb-ink);
+  font-family: var(--cv-font-body);
+}
+
+.gb-wrap {
+  max-width: var(--gb-max);
+  margin: 0 auto;
+  padding: 0 16px 48px;
+}
+
+/* ── 머리 ─────────────────────────────────── */
+
+.gb-top {
+  text-align: center;
+  padding: 26px 0 10px;
+}
+
+.gb-back {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--gb-soft);
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.gb-back:hover {
+  color: var(--gb-ink);
+}
+
+.gb-h1 {
+  font-family: var(--cv-font-sign);
+  font-size: clamp(23px, 6.5vw, 30px);
+  margin: 0 0 6px;
+}
+
+.gb-sub {
+  margin: 0;
+  color: var(--gb-soft);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.gb-demo {
+  max-width: var(--gb-max);
+  margin: 0 auto 14px;
+  background: #fff5d8;
+  border: 1px solid #ecd9a0;
+  color: #7a5b12;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ── 단계 표시 ───────────────────────────── */
+
+.gb-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 18px 0 20px;
+}
+
+.gb-step {
+  width: 26px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--gb-line);
+  transition: background 220ms ease, width 220ms ease;
+}
+
+.gb-step[data-on="true"] {
+  background: var(--gb-green);
+  width: 40px;
+}
+
+.gb-stepLabel {
+  text-align: center;
+  font-family: var(--cv-font-sign);
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+
+.gb-stepHint {
+  text-align: center;
+  color: var(--gb-soft);
+  font-size: 13.5px;
+  margin: 0 0 18px;
+  line-height: 1.6;
+}
+
+/* ── 학생 고르기 ─────────────────────────── */
+
+.gb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.gb-student {
+  background: var(--gb-card);
+  border: 1.5px solid var(--gb-line);
+  border-radius: var(--gb-radius);
+  padding: 14px 12px 12px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.gb-student:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--gb-shadow);
+}
+
+.gb-student[aria-pressed="true"] {
+  border-color: var(--gb-green);
+  box-shadow: 0 0 0 3px rgba(79, 139, 61, 0.16);
+}
+
+.gb-studentName {
+  font-family: var(--cv-font-sign);
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.gb-studentGroup {
+  font-size: 11.5px;
+  color: var(--gb-soft);
+}
+
+.gb-studentCount {
+  font-size: 12px;
+  color: var(--gb-green-dark);
+  background: #eef6e9;
+  border-radius: 99px;
+  padding: 2px 9px;
+}
+
+.gb-miniRow {
+  display: flex;
+  gap: 1px;
+  min-height: 22px;
+  align-items: flex-end;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ── 꽃 고르기 ───────────────────────────── */
+
+.gb-flowers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+}
+
+.gb-flower {
+  background: var(--gb-card);
+  border: 1.5px solid var(--gb-line);
+  border-radius: var(--gb-radius);
+  padding: 12px 8px 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.gb-flower:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--gb-shadow);
+}
+
+.gb-flower[aria-pressed="true"] {
+  border-color: var(--gb-rose);
+  box-shadow: 0 0 0 3px rgba(194, 86, 111, 0.15);
+}
+
+.gb-flowerName {
+  font-family: var(--cv-font-sign);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.gb-flowerWord {
+  font-family: var(--cv-font-hand);
+  font-size: 14px;
+  color: var(--gb-soft);
+}
+
+/* ── 쓰기 ─────────────────────────────────── */
+
+.gb-field {
+  margin-bottom: 14px;
+}
+
+.gb-label {
+  display: block;
+  font-size: 13px;
+  color: var(--gb-soft);
+  margin-bottom: 6px;
+}
+
+.gb-input,
+.gb-textarea {
+  width: 100%;
+  border: 1.5px solid var(--gb-line);
+  border-radius: 12px;
+  background: var(--gb-card);
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 16px; /* 16px 미만이면 iOS에서 입력 시 화면이 확대됩니다 */
+  color: var(--gb-ink);
+  resize: vertical;
+}
+
+.gb-input:focus,
+.gb-textarea:focus {
+  outline: none;
+  border-color: var(--gb-green);
+  box-shadow: 0 0 0 3px rgba(79, 139, 61, 0.14);
+}
+
+.gb-count {
+  text-align: right;
+  font-size: 12px;
+  color: var(--gb-soft);
+  margin-top: 4px;
+}
+
+.gb-preview {
+  background: var(--gb-card);
+  border: 1.5px dashed var(--gb-line);
+  border-radius: var(--gb-radius);
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.gb-previewBody {
+  min-width: 0;
+}
+
+.gb-previewTo {
+  font-size: 12.5px;
+  color: var(--gb-soft);
+  margin: 0 0 4px;
+}
+
+.gb-previewMsg {
+  font-family: var(--cv-font-hand);
+  font-size: 18px;
+  line-height: 1.45;
+  margin: 0;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+/* ── 단추 ─────────────────────────────────── */
+
+.gb-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.gb-btn {
+  flex: 1;
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 18px;
+  font-family: var(--cv-font-sign);
+  font-size: 16px;
+  cursor: pointer;
+  background: var(--gb-card);
+  color: var(--gb-ink);
+  box-shadow: inset 0 0 0 1.5px var(--gb-line);
+  transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gb-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.gb-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.gb-btn--go {
+  background: var(--gb-green);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(79, 139, 61, 0.32);
+}
+
+.gb-btn--rose {
+  background: var(--gb-rose);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(194, 86, 111, 0.3);
+}
+
+.gb-btn--back {
+  flex: 0 0 auto;
+  padding-inline: 20px;
+}
+
+/* ── 다 놓았을 때 ─────────────────────────── */
+
+.gb-done {
+  text-align: center;
+  padding: 22px 0 8px;
+}
+
+.gb-doneArt {
+  margin: 0 auto 10px;
+  animation: gb-pop 620ms cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+
+@keyframes gb-pop {
+  0% {
+    transform: scale(0.3) rotate(-18deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12) rotate(4deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.gb-doneTitle {
+  font-family: var(--cv-font-sign);
+  font-size: 22px;
+  margin: 0 0 8px;
+}
+
+.gb-doneSub {
+  color: var(--gb-soft);
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0 0 18px;
+}
+
+/* ── 정원 화면 ────────────────────────────── */
+
+.gb-gardenBox {
+  border-radius: var(--gb-radius);
+  overflow: hidden;
+  border: 1.5px solid var(--gb-line);
+  background: var(--gb-sky);
+  box-shadow: var(--gb-shadow);
+}
+
+.gb-gardenSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.gb-stats {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.gb-stat {
+  flex: 1;
+  background: var(--gb-card);
+  border: 1.5px solid var(--gb-line);
+  border-radius: var(--gb-radius);
+  padding: 12px;
+  text-align: center;
+}
+
+.gb-statNum {
+  font-family: var(--cv-font-sign);
+  font-size: 26px;
+  line-height: 1.1;
+  color: var(--gb-green-dark);
+}
+
+.gb-statLabel {
+  font-size: 12px;
+  color: var(--gb-soft);
+  margin-top: 3px;
+}
+
+/* ── 방명록 목록 ─────────────────────────── */
+
+.gb-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.gb-note {
+  background: var(--gb-card);
+  border: 1.5px solid var(--gb-line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+}
+
+.gb-noteBody {
+  min-width: 0;
+  flex: 1;
+}
+
+.gb-noteMsg {
+  font-family: var(--cv-font-hand);
+  font-size: 17px;
+  line-height: 1.5;
+  margin: 0 0 4px;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.gb-noteMeta {
+  font-size: 12px;
+  color: var(--gb-soft);
+}
+
+.gb-empty {
+  text-align: center;
+  color: var(--gb-soft);
+  font-family: var(--cv-font-hand);
+  font-size: 17px;
+  padding: 30px 0;
+}
+
+.gb-err {
+  background: #fdeced;
+  border: 1px solid #f3c2c7;
+  color: #a03040;
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-size: 13.5px;
+  margin: 12px 0;
+}
+
+/* ── 전자칠판(태블릿) 화면 ───────────────── */
+
+.gb-board {
+  /* 태블릿에 띄워 두는 화면이라 스크롤이 생기면 안 됩니다.
+     높이를 화면에 못 박아야 안쪽 무대가 남는 자리를 정확히 가져갑니다. */
+  height: 100dvh;
+  overflow: hidden;
+  background: linear-gradient(180deg, #cfe6f5 0%, #e7f2f8 55%, #f6f2e8 100%);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.gb-boardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gb-boardTitle {
+  font-family: var(--cv-font-sign);
+  font-size: clamp(24px, 3.4vw, 40px);
+  margin: 0;
+  color: #3d5a2e;
+}
+
+.gb-boardCount {
+  font-family: var(--cv-font-sign);
+  font-size: clamp(18px, 2.6vw, 28px);
+  color: #5c7a48;
+}
+
+.gb-boardStage {
+  flex: 1;
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #eaf4d9;
+  box-shadow: 0 8px 30px rgba(70, 90, 50, 0.16);
+  /* min-height: 0 이 없으면 안쪽 그림이 칸을 밀어내 페이지가 넘칩니다. */
+  min-height: 0;
+}
+
+/* 무대 안에서는 그림이 칸 크기를 따라갑니다(반대가 아니라). */
+.gb-boardStage .gb-gardenSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.gb-ticker {
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 16px;
+  padding: 12px 18px;
+  font-family: var(--cv-font-hand);
+  font-size: clamp(16px, 2.2vw, 24px);
+  color: #4a4034;
+  overflow: hidden;
+  white-space: nowrap;
+  min-height: 2.4em;
+  display: flex;
+  align-items: center;
+}
+
+.gb-tickerItem {
+  animation: gb-slidein 500ms ease;
+}
+
+@keyframes gb-slidein {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gb-doneArt,
+  .gb-tickerItem {
+    animation: none !important;
+  }
+}
