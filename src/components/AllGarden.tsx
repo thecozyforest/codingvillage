@@ -257,6 +257,11 @@ export default function AllGarden({ board = false }: { board?: boolean }) {
         </Link>
       </div>
 
+      <div className="gb-sideDoor">
+        <span>전시에 참여한 학생인가요?</span>
+        <Link href="/guestbook/mine">나에게 온 꽃다발 보기 →</Link>
+      </div>
+
       <div className="gb-list" style={{ marginTop: 22 }}>
         {recent.length === 0 && <p className="gb-empty">아직 남겨진 말이 없어요.</p>}
         {recent.map((e) => (

@@ -684,3 +684,39 @@
   padding: 1px 5px;
   font-size: 12px;
 }
+
+/* ── 학생용 옆문 ─────────────────────────────
+   손님 화면에 얹혀 있지만 손님이 누를 것은 아니라서,
+   눈에 띄되 흐름을 가로채지 않을 만큼만 조용하게 둡니다. */
+
+.gb-sideDoor {
+  margin-top: 30px;
+  padding-top: 18px;
+  border-top: 1px solid var(--gb-line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.gb-sideDoor span {
+  font-size: 12.5px;
+  color: var(--gb-soft);
+}
+
+.gb-sideDoor a {
+  font-family: var(--cv-font-sign);
+  font-size: 15px;
+  color: var(--gb-green-dark);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--gb-line);
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.gb-sideDoor a:hover {
+  border-color: var(--gb-green);
+  background: #f2f8ef;
+}

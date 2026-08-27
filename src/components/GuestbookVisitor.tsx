@@ -245,6 +245,12 @@ export default function GuestbookVisitor() {
           </button>
         )}
       </div>
+
+      {/* 손님용 화면이지만, 학생도 여기로 들어옵니다. 자기 꽃다발로 가는 문을 열어 둡니다. */}
+      <div className="gb-sideDoor">
+        <span>전시에 참여한 학생인가요?</span>
+        <Link href="/guestbook/mine">나에게 온 꽃다발 보기 →</Link>
+      </div>
     </div>
   );
 }
