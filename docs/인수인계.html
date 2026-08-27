@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>코딩 마을 이어가기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #f3f6f2;
+    --surface: #ffffff;
+    --sunk: #eaefe8;
+    --ink: #1d2a23;
+    --muted: #66746c;
+    --accent: #3d7a38;
+    --accent-soft: #e6f0e4;
+    --pending: #a06412;
+    --pending-soft: #f7edda;
+    --line: #dce3da;
+    --shadow: 0 1px 2px rgba(29, 42, 35, .05), 0 8px 24px rgba(29, 42, 35, .05);
+
+    --f-display: "Gowun Batang", "Apple SD Gothic Neo", "Malgun Gothic", serif;
+    --f-body: "IBM Plex Sans KR", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, "Consolas", monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #131916;
+      --surface: #1b231e;
+      --sunk: #161d19;
+      --ink: #e5ebe7;
+      --muted: #8fa098;
+      --accent: #79c069;
+      --accent-soft: #22301f;
+      --pending: #d2a054;
+      --pending-soft: #2e2618;
+      --line: #2a3630;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .28);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #131916;
+    --surface: #1b231e;
+    --sunk: #161d19;
+    --ink: #e5ebe7;
+    --muted: #8fa098;
+    --accent: #79c069;
+    --accent-soft: #22301f;
+    --pending: #d2a054;
+    --pending-soft: #2e2618;
+    --line: #2a3630;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .28);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 15px;
+    line-height: 1.72;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 50rem;
+    margin: 0 auto;
+    padding: 3.5rem 1.25rem 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.25rem;
+  }
+
+  /* ── 머리 ── */
+  .lede { display: flex; flex-direction: column; gap: .7rem; }
+
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: .7rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  h1 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 6vw, 2.9rem);
+    line-height: 1.24;
+    margin: 0;
+    text-wrap: balance;
+    letter-spacing: -.01em;
+  }
+
+  .lede p { margin: 0; color: var(--muted); max-width: 42ch; text-wrap: pretty; }
+
+  h2 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 0 0 1.1rem;
+    text-wrap: balance;
+    letter-spacing: -.005em;
+  }
+
+  h3 {
+    font-size: .95rem;
+    font-weight: 600;
+    margin: 0 0 .3rem;
+  }
+
+  section { display: block; }
+
+  /* ── 상태판 ── */
+  .board {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 9.5rem 1fr auto;
+    gap: .5rem 1rem;
+    align-items: baseline;
+    padding: .85rem 1.15rem;
+    border-top: 1px solid var(--line);
+  }
+  .row:first-child { border-top: 0; }
+
+  .row dt {
+    font-size: .82rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .row dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 34rem) {
+    .row { grid-template-columns: 1fr auto; }
+    .row dt { grid-column: 1 / -1; }
+  }
+
+  .chip {
+    font-family: var(--f-mono);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    padding: .18rem .5rem;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+  .chip.ok { background: var(--accent-soft); color: var(--accent); }
+  .chip.wait { background: var(--pending-soft); color: var(--pending); }
+
+  /* ── 주소 ── */
+  .links { display: flex; flex-direction: column; gap: .6rem; }
+
+  .link {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: .8rem 1rem;
+  }
+
+  .link .what { flex: 1 1 auto; min-width: 0; }
+  .link .what h3 { margin: 0; }
+
+  .link a {
+    font-family: var(--f-mono);
+    font-size: .78rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    word-break: break-all;
+  }
+  .link a:hover { color: var(--accent); border-color: var(--accent); }
+
+  button.copy {
+    flex: 0 0 auto;
+    font-family: var(--f-body);
+    font-size: .76rem;
+    font-weight: 500;
+    color: var(--muted);
+    background: var(--sunk);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: .34rem .7rem;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+  }
+  button.copy:hover { color: var(--accent); border-color: var(--accent); }
+  button.copy[data-done="1"] { color: var(--accent); border-color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ── 만든 것 ── */
+  .built { display: grid; gap: .6rem; }
+
+  .built > div {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: .8rem 1rem;
+  }
+  .built p { margin: 0; color: var(--muted); font-size: .88rem; }
+  .built code { font-family: var(--f-mono); font-size: .8rem; color: var(--accent); }
+
+  /* ── 남은 일 ── */
+  .todo { list-style: none; margin: 0; padding: 0; counter-reset: t; display: grid; gap: .55rem; }
+
+  .todo li {
+    counter-increment: t;
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: .8rem;
+    align-items: start;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: .85rem 1rem;
+  }
+
+  .todo li::before {
+    content: counter(t);
+    font-family: var(--f-mono);
+    font-size: .72rem;
+    font-weight: 600;
+    color: var(--muted);
+    padding-top: .3rem;
+    min-width: 1ch;
+  }
+
+  .todo input { margin: .45rem 0 0; accent-color: var(--accent); width: 1rem; height: 1rem; cursor: pointer; }
+  .todo .body h3 { margin: 0; }
+  .todo .body p { margin: .15rem 0 0; color: var(--muted); font-size: .88rem; }
+  .todo li:has(input:checked) .body { opacity: .45; text-decoration: line-through; text-decoration-thickness: 1px; }
+
+  .flag {
+    font-family: var(--f-mono);
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    color: var(--pending);
+    background: var(--pending-soft);
+    border-radius: 4px;
+    padding: .1rem .4rem;
+    margin-left: .4rem;
+    vertical-align: .1em;
+    white-space: nowrap;
+  }
+
+  /* ── 표 ── */
+  .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: .88rem; min-width: 26rem; }
+  th, td { text-align: left; padding: .62rem .9rem; border-top: 1px solid var(--line); }
+  thead th { border-top: 0; font-size: .76rem; color: var(--muted); font-weight: 600; letter-spacing: .02em; }
+  td code, th code { font-family: var(--f-mono); font-size: .8rem; }
+
+  /* ── 프롬프트 ── */
+  .prompt {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .prompt header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .7rem .8rem .7rem 1.1rem;
+    border-bottom: 1px solid var(--line);
+    background: var(--sunk);
+  }
+  .prompt header span { font-size: .78rem; color: var(--muted); font-weight: 500; }
+
+  pre {
+    margin: 0;
+    padding: 1.1rem;
+    font-family: var(--f-mono);
+    font-size: .78rem;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+
+  /* ── 메모 ── */
+  .note {
+    border-left: 3px solid var(--pending);
+    background: var(--pending-soft);
+    border-radius: 0 10px 10px 0;
+    padding: .95rem 1.1rem;
+  }
+  .note p { margin: 0; font-size: .9rem; }
+  .note p + p { margin-top: .6rem; }
+  .note strong { font-weight: 600; }
+
+  footer {
+    color: var(--muted);
+    font-size: .8rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1.25rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="lede">
+    <span class="eyebrow">2026-08-27 · 작업 중단 시점</span>
+    <h1>경민T의 작은 코딩 마을</h1>
+    <p>스튜디오 시선 전시용 링크트리와 방명록. 내일 여기서부터 이어가면 됩니다.</p>
+  </div>
+
+  <section>
+    <h2>지금 상태</h2>
+    <dl class="board">
+      <div class="row">
+        <dt>저장소</dt>
+        <dd><code style="font-family:var(--f-mono);font-size:.8rem">thecozyforest/codingvillage</code> · main</dd>
+        <dd><span class="chip ok">푸시 완료</span></dd>
+      </div>
+      <div class="row">
+        <dt>사이트</dt>
+        <dd>Vercel 자동 배포 (main에 push하면 나감)</dd>
+        <dd><span class="chip ok">배포됨</span></dd>
+      </div>
+      <div class="row">
+        <dt>방명록 데이터</dt>
+        <dd>GAS + 구글시트에 연결됨. 데모 모드 아님</dd>
+        <dd><span class="chip ok">연결됨</span></dd>
+      </div>
+      <div class="row">
+        <dt>학생 명단</dt>
+        <dd>19명 등록</dd>
+        <dd><span class="chip ok">입력 완료</span></dd>
+      </div>
+      <div class="row">
+        <dt>놓인 꽃</dt>
+        <dd>0송이 — 아직 아무도 안 놓음</dd>
+        <dd><span class="chip wait">전시 전</span></dd>
+      </div>
+      <div class="row">
+        <dt>꽃다발 PIN</dt>
+        <dd>잠금 꺼짐. 이름만 고르면 남의 것도 열림</dd>
+        <dd><span class="chip wait">결정 필요</span></dd>
+      </div>
+      <div class="row">
+        <dt>작은 행복정원</dt>
+        <dd>주소를 못 받아서 지도에 「준비 중」으로 표시</dd>
+        <dd><span class="chip wait">주소 대기</span></dd>
+      </div>
+    </dl>
+  </section>
+
+  <section>
+    <h2>주소</h2>
+    <div class="links">
+      <div class="link">
+        <div class="what">
+          <h3>사이트 — 손님이 QR로 들어올 곳</h3>
+          <a href="https://codingvillage.vercel.app" target="_blank" rel="noopener">codingvillage.vercel.app</a>
+        </div>
+        <button class="copy" data-copy="https://codingvillage.vercel.app">복사</button>
+      </div>
+      <div class="link">
+        <div class="what">
+          <h3>전자칠판 — 전시장 태블릿에 띄울 화면</h3>
+          <a href="https://codingvillage.vercel.app/guestbook/board" target="_blank" rel="noopener">codingvillage.vercel.app/guestbook/board</a>
+        </div>
+        <button class="copy" data-copy="https://codingvillage.vercel.app/guestbook/board">복사</button>
+      </div>
+      <div class="link">
+        <div class="what">
+          <h3>내 꽃다발 — 전시 후 학생이 받아 갈 곳</h3>
+          <a href="https://codingvillage.vercel.app/guestbook/mine" target="_blank" rel="noopener">codingvillage.vercel.app/guestbook/mine</a>
+        </div>
+        <button class="copy" data-copy="https://codingvillage.vercel.app/guestbook/mine">복사</button>
+      </div>
+      <div class="link">
+        <div class="what">
+          <h3>저장소</h3>
+          <a href="https://github.com/thecozyforest/codingvillage" target="_blank" rel="noopener">github.com/thecozyforest/codingvillage</a>
+        </div>
+        <button class="copy" data-copy="https://github.com/thecozyforest/codingvillage">복사</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>만든 것</h2>
+    <div class="built">
+      <div>
+        <h3>마을 지도 <code>/</code></h3>
+        <p>굽은 길을 따라 건물이 좌우로 번갈아 섭니다. 건물을 누르면 안내 카드가 올라오고, 「마을 투어」를 누르면 입구부터 차례로 데려갑니다. 계절은 주마다 봄·여름·가을·겨울로 바뀌는데, 「10점짜리 행복 정원」과 같은 계산식을 써서 두 앱의 계절이 어긋나지 않습니다.</p>
+      </div>
+      <div>
+        <h3>꽃 놓기 <code>/guestbook</code></h3>
+        <p>손님이 학생을 고르고 → 꽃을 고르고 → 한 마디를 남깁니다. 받은 꽃 개수는 일부러 안 보여 줍니다.</p>
+      </div>
+      <div>
+        <h3>모두의 정원 <code>/guestbook/board</code> · <code>/guestbook/garden</code></h3>
+        <p>「모두의 꽃밭」과 「정원마다 피어난 꽃」이 22초마다 번갈아 뜹니다. 정원별 보기는 이름순이고, 꽃을 못 받은 사람도 똑같이 한 칸을 차지합니다.</p>
+      </div>
+      <div>
+        <h3>내 꽃다발 <code>/guestbook/mine</code></h3>
+        <p>학생이 자기에게 온 꽃과 편지를 카드로 내려받습니다. 행복정원 포토카드가 꽃만 그리고 글을 빠뜨리던 것을 뒤집어, <strong>이 카드에는 글이 반드시 들어갑니다.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>남은 일</h2>
+    <ol class="todo" id="todo">
+      <li>
+        <input type="checkbox" id="t1" aria-labelledby="t1h">
+        <div class="body">
+          <h3 id="t1h">꽃 놓기를 실제로 한 번 눌러 보기<span class="flag">가장 급함</span></h3>
+          <p>명단과 정원을 읽어오는 건 확인했지만, <strong>꽃을 놓는(쓰기) 경로는 실서버에서 아직 한 번도 안 눌러 봤습니다.</strong> 읽기와 다른 길이라 여기가 막혀 있으면 전시 당일에 터집니다. 폰으로 들어가 한 송이 놓아 보고, 시트에 줄이 생기는지 확인하면 끝납니다. 테스트로 넣은 줄은 시트에서 지우거나 <code>hidden</code> 칸에 <code>Y</code>를 넣으면 화면에서 사라집니다.</p>
+        </div>
+      </li>
+      <li>
+        <input type="checkbox" id="t2" aria-labelledby="t2h">
+        <div class="body">
+          <h3 id="t2h">「작은 행복정원」 주소 넣기</h3>
+          <p>그 앱 GAS의 <code>/exec</code> 주소를 <code>src/content/village.json</code>의 <code>happy-garden</code> → <code>href</code>에 넣으면 「준비 중」이 떨어집니다.</p>
+        </div>
+      </li>
+      <li>
+        <input type="checkbox" id="t3" aria-labelledby="t3h">
+        <div class="body">
+          <h3 id="t3h">PIN을 걸지 결정</h3>
+          <p>지금은 이름만 고르면 남의 꽃다발도 열립니다. 잠그려면 시트 「학생명단」의 <code>pin</code> 열을 <strong>19명 전부</strong> 채우고 「설정」의 <code>requirePin</code>을 <code>Y</code>로 바꿉니다. 빈 칸인 학생은 <code>Y</code>여도 그냥 열립니다 — 아무도 잠기지 않게 일부러 그렇게 뒀습니다.</p>
+        </div>
+      </li>
+      <li>
+        <input type="checkbox" id="t4" aria-labelledby="t4h">
+        <div class="body">
+          <h3 id="t4h">전시장 QR 만들기</h3>
+          <p><code>codingvillage.vercel.app</code>으로 만들어 붙이면 됩니다.</p>
+        </div>
+      </li>
+      <li>
+        <input type="checkbox" id="t5" aria-labelledby="t5h">
+        <div class="body">
+          <h3 id="t5h">체험 앱을 더 넣을지 정하기</h3>
+          <p>기존 앱 중 결이 맞는 후보 — 밑줄서랍·납작로그(독서), 칭찬샤워·엄지척(관계). JSON에 한 덩어리씩만 넣으면 길이 알아서 늘어납니다.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>시트에서 관리하기</h2>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>하고 싶은 것</th><th>어디서</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>부적절한 방명록 가리기</td><td><code>방명록</code> 탭 → 그 줄의 <code>hidden</code>에 <code>Y</code></td></tr>
+          <tr><td>새 방명록 그만 받기</td><td><code>설정</code> 탭 → <code>open</code>을 <code>N</code></td></tr>
+          <tr><td>PIN 잠그기</td><td><code>설정</code> 탭 → <code>requirePin</code>을 <code>Y</code></td></tr>
+          <tr><td>PIN 19개 자동 생성</td><td>스크립트에서 <code>setPins()</code> 실행 → 로그에 목록</td></tr>
+          <tr><td>학생 추가</td><td><code>학생명단</code> 탭에 이름만 적고 <code>setup()</code> 다시 실행</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>내일 이어서 하기</h2>
+    <div class="prompt">
+      <header>
+        <span>새 창에 그대로 붙여넣으세요</span>
+        <button class="copy" id="copyPrompt">프롬프트 복사</button>
+      </header>
+      <pre id="promptText">D:\클로드 작업 그룹\링크트리 만들자\codingvillage 에서 이어서 작업할 거야.
+
+「경민T의 작은 코딩 마을」 — 스튜디오 시선 전시용 링크트리(마을 지도)와
+방명록 앱(꽃 우체국)이야. 프로젝트 규칙과 지금 상태는 CLAUDE.md에
+정리해 뒀으니 먼저 읽어줘.
+
+살아 있는 주소:
+- 저장소  https://github.com/thecozyforest/codingvillage (main)
+- 사이트  https://codingvillage.vercel.app  (main에 push하면 Vercel 자동 배포)
+- 태블릿  https://codingvillage.vercel.app/guestbook/board
+
+어제까지 확인한 상태:
+- 방명록이 GAS+구글시트에 연결됨. 데모 모드 아님
+- 학생 19명 등록, 놓인 꽃 0송이, PIN 잠금 꺼짐
+
+남은 일 (급한 순서):
+1. 꽃 놓기(쓰기) 경로를 실제로 한 번 테스트 — 아직 실서버에서 안 해봤음
+2. 「작은 행복정원」 GAS /exec 주소를 village.json의 happy-garden href에 넣기
+3. PIN 잠글지 결정 (시트 학생명단 pin열 전부 + 설정 requirePin=Y)
+4. 전시장 QR 만들기
+
+먼저 CLAUDE.md를 읽고, 위 상태가 아직 맞는지 확인한 다음 알려줘.</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>짚고 갈 것</h2>
+    <div class="note">
+      <p><strong>이 사이트를 제대로 본 사람이 아직 없습니다.</strong> 작업하는 내내 브라우저 화면을 띄울 수 없어서, 구조와 좌표와 카드 픽셀은 전부 수치로만 확인했습니다. Vercel 썸네일에 마을이 그려진 건 봤지만 그게 전부입니다.</p>
+      <p>그러니 <strong>색이 촌스럽다거나 건물 그림이 어설프다거나 하는 건 아직 아무도 판단하지 않은 영역</strong>입니다. 폰으로 한번 훑어보시고 어색한 데를 알려주시면, 그게 다음 작업의 첫 항목이 되는 게 맞습니다.</p>
+    </div>
+  </section>
+
+  <footer>
+    코딩 마을 · 2026-08-27 기준 · 저장소의 <code style="font-family:var(--f-mono)">CLAUDE.md</code>에 같은 내용이 더 자세히 들어 있습니다
+  </footer>
+
+</div>
+
+<script>
+  // 복사 단추
+  document.querySelectorAll("button.copy").forEach(function (btn) {
+    btn.addEventListener("click", async function () {
+      var text = btn.dataset.copy || document.getElementById("promptText").textContent;
+      var label = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (e) {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); } catch (e2) { /* 손으로 긁어 복사하면 됩니다 */ }
+        ta.remove();
+      }
+      btn.textContent = "복사됨";
+      btn.dataset.done = "1";
+      setTimeout(function () {
+        btn.textContent = label;
+        delete btn.dataset.done;
+      }, 1600);
+    });
+  });
+
+  // 남은 일 체크 상태를 이 브라우저에만 기억해 둡니다
+  (function () {
+    var KEY = "codingvillage-handoff-todo";
+    var boxes = document.querySelectorAll("#todo input[type=checkbox]");
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { saved = {}; }
+    boxes.forEach(function (b) { if (saved[b.id]) b.checked = true; });
+    boxes.forEach(function (b) {
+      b.addEventListener("change", function () {
+        saved[b.id] = b.checked;
+        try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) { /* 저장 못 해도 화면은 그대로 */ }
+      });
+    });
+  })();
+</script>
+</body>
+</html>
