@@ -267,3 +267,87 @@ function plantFlower(body) {
     lock.releaseLock();
   }
 }
+
+// ── PIN 만들기 (선택) ────────────────────────
+// 학생이 「내 꽃다발」에서 남의 것을 열지 못하게 막고 싶을 때 씁니다.
+//
+//   setPins()        학생마다 4자리 PIN을 만들어 시트에 채우고 목록을 찍어 줍니다
+//   showPins()       이미 만들어진 PIN 목록을 다시 찍어 줍니다
+//   lockBouquets()   PIN을 실제로 요구하게 켭니다
+//   unlockBouquets() 다시 PIN 없이 열리게 합니다
+//
+// 이 넷은 시트만 건드리므로 **웹 앱을 다시 배포할 필요가 없습니다.**
+// 편집기에 이 파일을 붙여넣고 저장한 뒤 실행하면 됩니다.
+
+/** 비어 있는 PIN 칸만 채웁니다. 이미 있는 PIN은 건드리지 않습니다. */
+function setPins() {
+  var sh = getSS().getSheetByName('학생명단');
+  if (!sh || sh.getLastRow() < 2) { Logger.log('학생명단이 비어 있습니다.'); return; }
+
+  var n = sh.getLastRow() - 1;
+  var names = sh.getRange(2, 2, n, 1).getValues();   // B열: 이름
+  var pinRange = sh.getRange(2, 4, n, 1);            // D열: pin
+  var pins = pinRange.getValues();
+
+  // 이미 쓰고 있는 PIN은 다시 뽑지 않습니다.
+  var used = {};
+  for (var i = 0; i < n; i++) {
+    var cur = String(pins[i][0] || '').trim();
+    if (cur) used[cur] = true;
+  }
+
+  var made = 0;
+  for (var j = 0; j < n; j++) {
+    if (!String(names[j][0] || '').trim()) continue;   // 이름 없는 줄은 건너뜀
+    if (String(pins[j][0] || '').trim()) continue;     // 이미 PIN이 있음
+    var pin;
+    // 1000~9999 에서만 뽑습니다. 0으로 시작하면 시트가 숫자로 바꾸면서
+    // 앞의 0을 지워 버려서(0123 → 123) 학생이 넣은 값과 어긋납니다.
+    do { pin = String(Math.floor(1000 + Math.random() * 9000)); } while (used[pin]);
+    used[pin] = true;
+    pins[j][0] = pin;
+    made++;
+  }
+
+  pinRange.setValues(pins);
+  Logger.log('PIN ' + made + '개를 새로 만들었습니다.');
+  Logger.log('(다시 만들고 싶으면 그 학생의 pin 칸을 지우고 setPins() 를 다시 실행하세요)');
+  showPins();
+}
+
+/** 나눠 줄 PIN 목록을 찍어 줍니다. */
+function showPins() {
+  var sh = getSS().getSheetByName('학생명단');
+  if (!sh || sh.getLastRow() < 2) { Logger.log('학생명단이 비어 있습니다.'); return; }
+  var rows = sh.getRange(2, 1, sh.getLastRow() - 1, 6).getValues();
+  var out = ['', '─── 나눠 줄 PIN ───'];
+  rows.forEach(function (r) {
+    var name = String(r[1] || '').trim();
+    if (!name) return;
+    var pin = String(r[3] || '').trim();
+    out.push(name + '\t' + (pin || '(없음)'));
+  });
+  out.push('───────────────');
+  out.push('잠금 상태: ' + (cfgGet('requirePin', 'N') === 'Y' ? 'PIN 필요' : 'PIN 없이 열림'));
+  Logger.log(out.join('\n'));
+}
+
+/** PIN을 실제로 요구하게 켭니다. */
+function lockBouquets() { setRequirePin('Y'); }
+
+/** 다시 PIN 없이 열리게 합니다. */
+function unlockBouquets() { setRequirePin('N'); }
+
+function setRequirePin(v) {
+  var sh = getSS().getSheetByName('설정');
+  var rows = sh.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]) === 'requirePin') {
+      sh.getRange(i + 1, 2).setValue(v);
+      Logger.log(v === 'Y' ? '이제 PIN이 있어야 꽃다발이 열립니다.' : '이제 PIN 없이 열립니다.');
+      return;
+    }
+  }
+  sh.appendRow(['requirePin', v]);
+  Logger.log('설정에 requirePin 을 ' + v + ' 로 추가했습니다.');
+}
