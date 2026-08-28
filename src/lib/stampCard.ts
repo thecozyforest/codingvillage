@@ -38,10 +38,38 @@ function today() {
   }).format(new Date());
 }
 
-/** 실제로 찍힌 도장 하나. 살짝 기울여 손으로 찍은 느낌을 냅니다. */
-function drawStamp(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, label: string, tilt: number) {
+/** 도장 한 칸. 아직 안 들른 곳은 빈 자리로 남겨 둔다(그래야 도장판이 된다). */
+function drawStamp(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  r: number,
+  label: string,
+  tilt: number,
+  stamped: boolean
+) {
   ctx.save();
   ctx.translate(cx, cy);
+
+  if (!stamped) {
+    // 빈 자리 — 점선 동그라미와 흐린 이름
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = "#d9cdbb";
+    ctx.lineWidth = Math.max(2, r * 0.05);
+    ctx.setLineDash([r * 0.16, r * 0.13]);
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 0.92, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = "#b3a692";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    writeLabel(ctx, label, r);
+    ctx.restore();
+    return;
+  }
+
   ctx.rotate(tilt);
   ctx.globalAlpha = 0.88;
 
@@ -59,19 +87,24 @@ function drawStamp(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: num
   ctx.fillStyle = RED;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
+  writeLabel(ctx, label, r);
+  ctx.restore();
+}
 
-  // 이름이 길면 두 줄로 나눕니다(「마을 도서관」처럼 띄어쓰기가 있는 경우).
+/** 이름이 길면 띄어쓰기에서 두 줄로 나눈다(「마을 도서관」처럼). */
+function writeLabel(ctx: CanvasRenderingContext2D, label: string, r: number) {
   const parts = label.split(" ");
   if (parts.length > 1 && label.length > 4) {
-    ctx.font = `${r * 0.34}px ${HEAD}`;
-    ctx.fillText(parts[0], 0, -r * 0.2);
-    ctx.fillText(parts.slice(1).join(" "), 0, r * 0.22);
+    ctx.font = `${r * 0.3}px ${HEAD}`;
+    ctx.fillText(parts[0], 0, -r * 0.19);
+    ctx.fillText(parts.slice(1).join(" "), 0, r * 0.21);
+  } else if (label.length > 6) {
+    ctx.font = `${r * 0.24}px ${HEAD}`;
+    ctx.fillText(label, 0, 0);
   } else {
-    ctx.font = `${r * 0.38}px ${HEAD}`;
+    ctx.font = `${r * 0.33}px ${HEAD}`;
     ctx.fillText(label, 0, 0);
   }
-
-  ctx.restore();
 }
 
 async function readyFonts() {
@@ -98,7 +131,8 @@ async function save(canvas: HTMLCanvasElement, filename: string) {
 export async function downloadStampCard(opts: {
   villageName: string;
   exhibitionName: string;
-  places: string[];
+  /** 마을의 모든 곳. 들른 곳은 stamped: true. */
+  places: { name: string; stamped: boolean }[];
   /** 비우면 이름 줄을 아예 그리지 않습니다. */
   name?: string;
   withDate?: boolean;
@@ -106,15 +140,26 @@ export async function downloadStampCard(opts: {
   await readyFonts();
 
   const W = 1080;
-  // 도장 줄 아래 내용이 이름·날짜에 따라 줄었다 늘었다 하므로,
-  // 높이를 미리 재서 빈 자리가 남지 않게 합니다.
-  const stampY = 470;
-  const stampR = opts.places.length <= 3 ? 108 : 88;
+  const n = Math.max(1, opts.places.length);
+  const done = opts.places.filter((p) => p.stamped).length;
+  const all = done === n;
+
+  // 도장이 열두 개까지 늘 수 있어 한 줄로는 못 담습니다. 격자로 폅니다.
+  const cols = n <= 3 ? n : n <= 8 ? 3 : 4;
+  const rows = Math.ceil(n / cols);
+  const cellW = (W - 120) / cols;
+  const r = Math.min(cellW * 0.38, 92);
+  const cellH = r * 2.5;
+
+  const gridTop = 320;
+  const gridH = rows * cellH;
+
   const groundH = 150;
-  let below = stampY + stampR + 170;
+  let below = gridTop + gridH + 96;
   if (opts.name) below += 100;
   if (opts.withDate) below += 56;
-  const H = Math.round(below + 120 + groundH);
+  const H = Math.round(below + 110 + groundH);
+
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
@@ -123,7 +168,6 @@ export async function downloadStampCard(opts: {
   ctx.fillStyle = PAPER;
   ctx.fillRect(0, 0, W, H);
 
-  // 종이 테두리
   ctx.strokeStyle = "#e3d7c6";
   ctx.lineWidth = 3;
   roundRect(ctx, 40, 40, W - 80, H - 80, 28);
@@ -138,32 +182,38 @@ export async function downloadStampCard(opts: {
 
   ctx.fillStyle = SOFT;
   ctx.font = `26px ${BODY}`;
-  ctx.fillText(opts.exhibitionName, W / 2, 112);
+  ctx.fillText(opts.exhibitionName, W / 2, 108);
 
   ctx.fillStyle = INK;
-  ctx.font = `70px ${HEAD}`;
-  ctx.fillText("마을 완주 카드", W / 2, 168);
+  ctx.font = `68px ${HEAD}`;
+  ctx.fillText("마을 도장판", W / 2, 162);
 
   ctx.fillStyle = SOFT;
-  ctx.font = `30px ${BODY}`;
-  ctx.fillText(opts.villageName, W / 2, 262);
+  ctx.font = `28px ${BODY}`;
+  ctx.fillText(`${opts.villageName} · ${done} / ${n}`, W / 2, 252);
 
-  // 도장 줄
-  const n = Math.max(1, opts.places.length);
-  const r = stampR;
-  const gap = (W - 200) / n;
-  const y = stampY;
-  const tilts = [-0.13, 0.08, -0.06, 0.11, -0.09];
+  // 도장 격자
+  const tilts = [-0.13, 0.08, -0.06, 0.11, -0.09, 0.05, -0.11, 0.09, -0.04, 0.12, -0.08, 0.06];
   opts.places.forEach((p, i) => {
-    drawStamp(ctx, 100 + gap * (i + 0.5), y, r, p, tilts[i % tilts.length]);
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const inRow = Math.min(cols, n - row * cols);
+    // 마지막 줄이 덜 찼으면 가운데로 모읍니다.
+    const rowW = inRow * cellW;
+    const x = (W - rowW) / 2 + cellW * (col + 0.5);
+    const y = gridTop + cellH * (row + 0.5);
+    drawStamp(ctx, x, y, r, p.name, tilts[i % tilts.length], p.stamped);
   });
 
   ctx.fillStyle = INK;
-  ctx.font = `44px ${HAND}`;
-  ctx.fillText("이 마을을 끝까지 걸었습니다", W / 2, y + r + 70);
+  ctx.font = `42px ${HAND}`;
+  ctx.fillText(
+    all ? "이 마을을 끝까지 걸었습니다" : "이만큼 걸었습니다",
+    W / 2,
+    gridTop + gridH + 30
+  );
 
-  // 이름 · 날짜 — 넣기로 한 것만
-  let ly = y + r + 170;
+  let ly = gridTop + gridH + 96;
   if (opts.name) {
     ctx.strokeStyle = "#ddd0bb";
     ctx.lineWidth = 2;
@@ -184,7 +234,6 @@ export async function downloadStampCard(opts: {
     ly += 56;
   }
 
-  // 바닥 — 풀밭과 꽃 몇 송이
   const groundY = H - groundH;
   ctx.fillStyle = "#cfe0b0";
   ctx.fillRect(56, groundY, W - 112, H - 56 - groundY);
@@ -201,6 +250,6 @@ export async function downloadStampCard(opts: {
   ctx.font = `24px ${BODY}`;
   ctx.fillText(opts.villageName, W / 2, H - 108);
 
-  const stem = opts.name ? `${opts.name}_마을완주카드` : "마을완주카드";
+  const stem = opts.name ? `${opts.name}_마을도장판` : "마을도장판";
   await save(canvas, `${stem}.png`);
 }

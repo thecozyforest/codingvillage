@@ -565,54 +565,60 @@ export default function VillageMap() {
             {stampedCount} / {stampable.length}
           </span>
         </div>
-        {stampedCount === stampable.length && stampable.length > 0 && (
-          <div className="cv-finish">
-            <p className="cv-stampDone">마을을 다 둘러보셨어요. 고맙습니다 🌸</p>
+        {/* 도장판은 **언제든** 받을 수 있어야 합니다. 예전에는 12곳을 다 돌아야만
+            내려받기 칸이 나타나서, 사실상 아무도 못 받았습니다. */}
+        <div className="cv-finish">
+          <p className="cv-stampDone">
+            {stampedCount === stampable.length
+              ? "마을을 다 둘러보셨어요. 고맙습니다 🌸"
+              : stampedCount > 0
+                ? `지금까지 ${stampedCount}곳을 들렀어요. 도장판은 언제든 받아 갈 수 있어요.`
+                : "한 곳이라도 들르면 도장이 찍혀요. 도장판은 지금 받아 가도 괜찮아요."}
+          </p>
 
-            <label className="cv-finishField">
-              <span>
-                이름 <em>(안 적어도 괜찮아요)</em>
-              </span>
-              <input
-                className="cv-finishInput"
-                value={cardName}
-                maxLength={12}
-                onChange={(e) => setCardName(e.target.value)}
-                placeholder="비워 두면 이름 없이 나와요"
-              />
-            </label>
+          <label className="cv-finishField">
+            <span>
+              이름 <em>(안 적어도 괜찮아요)</em>
+            </span>
+            <input
+              className="cv-finishInput"
+              value={cardName}
+              maxLength={12}
+              onChange={(e) => setCardName(e.target.value)}
+              placeholder="비워 두면 이름 없이 나와요"
+            />
+          </label>
 
-            <label className="cv-finishCheck">
-              <input
-                type="checkbox"
-                checked={withDate}
-                onChange={(e) => setWithDate(e.target.checked)}
-              />
-              오늘 날짜 넣기
-            </label>
+          <label className="cv-finishCheck">
+            <input
+              type="checkbox"
+              checked={withDate}
+              onChange={(e) => setWithDate(e.target.checked)}
+            />
+            오늘 날짜 넣기
+          </label>
 
-            <button
-              className="cv-btn cv-btn--go"
-              disabled={making}
-              onClick={async () => {
-                setMaking(true);
-                try {
-                  await downloadStampCard({
-                    villageName: village.meta.siteName,
-                    exhibitionName: village.meta.exhibition,
-                    places: stampable.map((p) => p.name),
-                    name: cardName.trim() || undefined,
-                    withDate,
-                  });
-                } finally {
-                  setMaking(false);
-                }
-              }}
-            >
-              {making ? "만드는 중…" : "완주 카드 내려받기"}
-            </button>
-          </div>
-        )}
+          <button
+            className="cv-btn cv-btn--go"
+            disabled={making}
+            onClick={async () => {
+              setMaking(true);
+              try {
+                await downloadStampCard({
+                  villageName: village.meta.siteName,
+                  exhibitionName: village.meta.exhibition,
+                  places: stampable.map((p) => ({ name: p.name, stamped: !!stamps[p.id] })),
+                  name: cardName.trim() || undefined,
+                  withDate,
+                });
+              } finally {
+                setMaking(false);
+              }
+            }}
+          >
+            {making ? "만드는 중…" : "도장판 내려받기"}
+          </button>
+        </div>
       </div>
 
       <div className="cv-map">
