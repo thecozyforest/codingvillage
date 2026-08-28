@@ -333,49 +333,21 @@
 <div class="page">
 
   <div class="lede">
-    <span class="eyebrow">2026-08-27 · 작업 중단 시점</span>
+    <span class="eyebrow">2026-08-28 · 작업 중단 시점</span>
     <h1>경민T의 작은 코딩 마을</h1>
-    <p>스튜디오 시선 전시용 링크트리와 방명록. 내일 여기서부터 이어가면 됩니다.</p>
+    <p>스튜디오 시선 전시용 링크트리와 방명록. 마을 13곳이 모두 열려 있고, 방명록도 실제로 돌아갑니다.</p>
   </div>
 
   <section>
     <h2>지금 상태</h2>
     <dl class="board">
-      <div class="row">
-        <dt>저장소</dt>
-        <dd><code style="font-family:var(--f-mono);font-size:.8rem">thecozyforest/codingvillage</code> · main</dd>
-        <dd><span class="chip ok">푸시 완료</span></dd>
-      </div>
-      <div class="row">
-        <dt>사이트</dt>
-        <dd>Vercel 자동 배포 (main에 push하면 나감)</dd>
-        <dd><span class="chip ok">배포됨</span></dd>
-      </div>
-      <div class="row">
-        <dt>방명록 데이터</dt>
-        <dd>GAS + 구글시트에 연결됨. 데모 모드 아님</dd>
-        <dd><span class="chip ok">연결됨</span></dd>
-      </div>
-      <div class="row">
-        <dt>학생 명단</dt>
-        <dd>19명 등록</dd>
-        <dd><span class="chip ok">입력 완료</span></dd>
-      </div>
-      <div class="row">
-        <dt>놓인 꽃</dt>
-        <dd>0송이 — 아직 아무도 안 놓음</dd>
-        <dd><span class="chip wait">전시 전</span></dd>
-      </div>
-      <div class="row">
-        <dt>꽃다발 PIN</dt>
-        <dd>잠금 꺼짐. 이름만 고르면 남의 것도 열림</dd>
-        <dd><span class="chip wait">결정 필요</span></dd>
-      </div>
-      <div class="row">
-        <dt>작은 행복정원</dt>
-        <dd>주소를 못 받아서 지도에 「준비 중」으로 표시</dd>
-        <dd><span class="chip wait">주소 대기</span></dd>
-      </div>
+      <div class="row"><dt>저장소</dt><dd><code style="font-family:var(--f-mono);font-size:.8rem">thecozyforest/codingvillage</code> · main · 회귀점 태그 <code style="font-family:var(--f-mono);font-size:.8rem">v1</code></dd><dd><span class="chip ok">푸시 완료</span></dd></div>
+      <div class="row"><dt>사이트</dt><dd>Vercel 자동 배포 (main에 push하면 나감)</dd><dd><span class="chip ok">배포됨</span></dd></div>
+      <div class="row"><dt>마을</dt><dd>13곳 — 입구 + 앱 11개 + 꽃 우체국. 길은 찌그러진 고리</dd><dd><span class="chip ok">모두 열림</span></dd></div>
+      <div class="row"><dt>방명록 쓰기</dt><dd>실서버에서 통과. 실제 글 2건이 시트에 저장돼 있음</dd><dd><span class="chip ok">검증 끝</span></dd></div>
+      <div class="row"><dt>학생 명단</dt><dd>19명 등록</dd><dd><span class="chip ok">입력 완료</span></dd></div>
+      <div class="row"><dt>꽃다발 PIN</dt><dd>잠금 꺼짐. 이름만 고르면 남의 것도 열림</dd><dd><span class="chip wait">결정 필요</span></dd></div>
+      <div class="row"><dt>QR·안내판</dt><dd><code style="font-family:var(--f-mono);font-size:.8rem">docs/qr/</code> · 되읽어 검사까지 마침</dd><dd><span class="chip ok">준비됨</span></dd></div>
     </dl>
   </section>
 
@@ -418,19 +390,27 @@
     <div class="built">
       <div>
         <h3>마을 지도 <code>/</code></h3>
-        <p>굽은 길을 따라 건물이 좌우로 번갈아 섭니다. 건물을 누르면 안내 카드가 올라오고, 「마을 투어」를 누르면 입구부터 차례로 데려갑니다. 계절은 주마다 봄·여름·가을·겨울로 바뀌는데, 「10점짜리 행복 정원」과 같은 계산식을 써서 두 앱의 계절이 어긋나지 않습니다.</p>
+        <p>마을을 한 바퀴 도는 <strong>찌그러진 고리 길</strong>을 따라 건물 13곳이 서 있습니다. 건물마다 큰길로 나가는 샛길이 있고, 고리 안쪽은 연못과 우물이 있는 마을 마당입니다. 계절마다 봄 꽃잎·여름 나뭇잎과 볕·가을 낙엽·겨울 눈이 날립니다.</p>
       </div>
       <div>
-        <h3>꽃 놓기 <code>/guestbook</code></h3>
-        <p>손님이 학생을 고르고 → 꽃을 고르고 → 한 마디를 남깁니다. 받은 꽃 개수는 일부러 안 보여 줍니다.</p>
+        <h3>앱 12곳</h3>
+        <p>마을 도서관(오늘의 한 마디) · 작은 행복정원 · 습관 훈련소 · 밑줄 서랍 · 말랑문법연구소 · 고전 이야기극장 · 오답 진료소 · 진로 관제탑 · 진로 나침반 · 기록 공방 · 인구 전망대 · 꽃 우체국. 건물 그림은 앱 성격에 맞춰 따로 그렸습니다.</p>
       </div>
       <div>
-        <h3>모두의 정원 <code>/guestbook/board</code> · <code>/guestbook/garden</code></h3>
+        <h3>마을 도장</h3>
+        <p>들어갔다 나오면 건물에 도장이 쾅 찍힙니다. 이름과 날짜를 골라 <strong>도장판을 언제든 내려받을</strong> 수 있고, 안 들른 곳은 점선 빈칸으로 남습니다. 기기를 돌려 쓸 때는 「도장판 비우고 처음부터」로 초기화합니다.</p>
+      </div>
+      <div>
+        <h3>꽃 우체국 <code>/guestbook</code></h3>
+        <p>이 마을에서 <strong>유일하게 「하고 가는」 곳</strong>이라, 간판에 「방명록」 딱지를 붙이고 건물을 키우고 아래에 안내 띠를 띄웠습니다. 띠는 방명록을 쓰면 저절로 사라집니다.</p>
+      </div>
+      <div>
+        <h3>모두의 정원 <code>/guestbook/board</code></h3>
         <p>「모두의 꽃밭」과 「정원마다 피어난 꽃」이 22초마다 번갈아 뜹니다. 정원별 보기는 이름순이고, 꽃을 못 받은 사람도 똑같이 한 칸을 차지합니다.</p>
       </div>
       <div>
         <h3>내 꽃다발 <code>/guestbook/mine</code></h3>
-        <p>학생이 자기에게 온 꽃과 편지를 카드로 내려받습니다. 행복정원 포토카드가 꽃만 그리고 글을 빠뜨리던 것을 뒤집어, <strong>이 카드에는 글이 반드시 들어갑니다.</strong></p>
+        <p>학생이 자기에게 온 꽃과 편지를 카드로 내려받습니다. 행복정원 포토카드가 글을 빠뜨리던 것을 뒤집어, <strong>이 카드에는 글이 반드시 들어갑니다.</strong></p>
       </div>
     </div>
   </section>
@@ -438,41 +418,10 @@
   <section>
     <h2>남은 일</h2>
     <ol class="todo" id="todo">
-      <li>
-        <input type="checkbox" id="t1" aria-labelledby="t1h">
-        <div class="body">
-          <h3 id="t1h">꽃 놓기를 실제로 한 번 눌러 보기<span class="flag">가장 급함</span></h3>
-          <p>명단과 정원을 읽어오는 건 확인했지만, <strong>꽃을 놓는(쓰기) 경로는 실서버에서 아직 한 번도 안 눌러 봤습니다.</strong> 읽기와 다른 길이라 여기가 막혀 있으면 전시 당일에 터집니다. 폰으로 들어가 한 송이 놓아 보고, 시트에 줄이 생기는지 확인하면 끝납니다. 테스트로 넣은 줄은 시트에서 지우거나 <code>hidden</code> 칸에 <code>Y</code>를 넣으면 화면에서 사라집니다.</p>
-        </div>
-      </li>
-      <li>
-        <input type="checkbox" id="t2" aria-labelledby="t2h">
-        <div class="body">
-          <h3 id="t2h">「작은 행복정원」 주소 넣기</h3>
-          <p>그 앱 GAS의 <code>/exec</code> 주소를 <code>src/content/village.json</code>의 <code>happy-garden</code> → <code>href</code>에 넣으면 「준비 중」이 떨어집니다.</p>
-        </div>
-      </li>
-      <li>
-        <input type="checkbox" id="t3" aria-labelledby="t3h">
-        <div class="body">
-          <h3 id="t3h">PIN을 걸지 결정</h3>
-          <p>지금은 이름만 고르면 남의 꽃다발도 열립니다. 잠그려면 시트 「학생명단」의 <code>pin</code> 열을 <strong>19명 전부</strong> 채우고 「설정」의 <code>requirePin</code>을 <code>Y</code>로 바꿉니다. 빈 칸인 학생은 <code>Y</code>여도 그냥 열립니다 — 아무도 잠기지 않게 일부러 그렇게 뒀습니다.</p>
-        </div>
-      </li>
-      <li>
-        <input type="checkbox" id="t4" aria-labelledby="t4h">
-        <div class="body">
-          <h3 id="t4h">전시장 QR 만들기</h3>
-          <p><code>codingvillage.vercel.app</code>으로 만들어 붙이면 됩니다.</p>
-        </div>
-      </li>
-      <li>
-        <input type="checkbox" id="t5" aria-labelledby="t5h">
-        <div class="body">
-          <h3 id="t5h">체험 앱을 더 넣을지 정하기</h3>
-          <p>기존 앱 중 결이 맞는 후보 — 밑줄서랍·납작로그(독서), 칭찬샤워·엄지척(관계). JSON에 한 덩어리씩만 넣으면 길이 알아서 늘어납니다.</p>
-        </div>
-      </li>
+      <li><input type="checkbox" id="t1" aria-labelledby="t1h"><div class="body"><h3 id="t1h">PIN을 걸지 결정</h3><p>지금은 이름만 고르면 남의 꽃다발도 열립니다. 잠그려면 앱스 스크립트 편집기에 <code>gas/꽃우체국_code.gs</code>를 다시 붙여넣고 <code>setPins()</code> → <code>lockBouquets()</code>를 실행하세요. 19명분 PIN이 자동으로 만들어지고 실행 로그에 목록이 찍힙니다. <strong>웹 앱 재배포는 필요 없습니다.</strong></p></div></li>
+      <li><input type="checkbox" id="t2" aria-labelledby="t2h"><div class="body"><h3 id="t2h">눈으로 보고 다듬기<span class="flag">아직 아무도 안 함</span></h3><p>구조와 좌표와 겹침은 전부 수치로 검증했지만, <strong>색이나 건물 그림이 보기 좋은지는 아직 아무도 판단하지 않았습니다.</strong> 폰으로 한 바퀴 돌아보고 어색한 데를 고치는 게 다음 순서로 맞습니다.</p></div></li>
+      <li><input type="checkbox" id="t3" aria-labelledby="t3h"><div class="body"><h3 id="t3h">전시 당일 운영 점검</h3><p>태블릿에 <code>/guestbook/board</code>를 띄워 두고, <code>docs/qr/안내판_인쇄용.html</code>을 인쇄해 붙입니다. 기기를 여러 사람이 돌려 쓴다면 손님이 바뀔 때 「도장판 비우고 처음부터」를 눌러 주세요.</p></div></li>
+      <li><input type="checkbox" id="t4" aria-labelledby="t4h"><div class="body"><h3 id="t4h">부적절한 방명록 대비</h3><p>시트 <code>방명록</code> 탭의 <code>hidden</code> 칸에 <code>Y</code>를 넣으면 15초 안에 화면에서 사라집니다. 태블릿 화면 자막에 방명록 글이 그대로 흘러가니, 전시 중 시트를 한 번씩 봐 주세요.</p></div></li>
     </ol>
   </section>
 
@@ -503,39 +452,56 @@
       </header>
       <pre id="promptText">D:\클로드 작업 그룹\링크트리 만들자\codingvillage 에서 이어서 작업할 거야.
 
+■ 무엇
 「경민T의 작은 코딩 마을」 — 스튜디오 시선 전시용 링크트리(마을 지도)와
-방명록 앱(꽃 우체국)이야. 프로젝트 규칙과 지금 상태는 CLAUDE.md에
-정리해 뒀으니 먼저 읽어줘.
+방명록 앱(꽃 우체국)이야. 손님이 QR로 들어와 마을길을 한 바퀴 돌며 앱을
+체험하고, 마지막에 진탐아 학생에게 꽃 한 송이와 한 마디를 놓고 가는 구조.
 
-살아 있는 주소:
-- 저장소  https://github.com/thecozyforest/codingvillage (main)
-- 사이트  https://codingvillage.vercel.app  (main에 push하면 Vercel 자동 배포)
+프로젝트 규칙·구조·「되돌리지 말 것」이 CLAUDE.md에 다 적혀 있으니
+작업 전에 반드시 먼저 읽어줘.
+
+■ 살아 있는 주소
+- 저장소  https://github.com/thecozyforest/codingvillage  (main / 회귀점 태그 v1)
+- 사이트  https://codingvillage.vercel.app   (main에 push하면 Vercel 자동 배포)
 - 태블릿  https://codingvillage.vercel.app/guestbook/board
+- 학생용  https://codingvillage.vercel.app/guestbook/mine
+- QR·안내판  docs/qr/
 
-어제까지 확인한 상태:
-- 방명록이 GAS+구글시트에 연결됨. 데모 모드 아님
-- 학생 19명 등록, 놓인 꽃 0송이, PIN 잠금 꺼짐
+■ 확인된 상태 (2026-08-28 기준)
+- 마을 13곳: 입구 + 앱 11개 + 꽃 우체국. 길은 찌그러진 고리 모양
+- 방명록이 GAS+구글시트에 연결됨, 데모 모드 아님
+- 학생 19명 등록 / 실제 방명록 2건 저장됨 → 쓰기 경로 실서버 검증 끝
+- PIN 잠금 꺼짐 (requirePin: N)
+- 습관 훈련소는 학급 코드 H4H8 필요 (체험용 학급이라 공개해도 됨)
+- 도장은 localStorage에 저장, 「도장판 비우고 처음부터」로 초기화 가능
 
-남은 일 (급한 순서):
-1. 꽃 놓기(쓰기) 경로를 실제로 한 번 테스트 — 아직 실서버에서 안 해봤음
-2. 「작은 행복정원」 GAS /exec 주소를 village.json의 happy-garden href에 넣기
-3. PIN 잠글지 결정 (시트 학생명단 pin열 전부 + 설정 requirePin=Y)
-4. 전시장 QR 만들기
+■ 남은 일
+1. PIN을 걸지 결정. 걸려면 GAS 편집기에 gas/꽃우체국_code.gs 를 다시
+   붙여넣고 setPins() → lockBouquets() 실행 (19명분 자동 생성)
+2. 이 사이트를 미적으로 평가한 사람이 아직 없음. 폰으로 보고 어색한
+   데가 있으면 그것부터 고치는 게 순서
+3. 전시 당일 운영: 태블릿에 board 띄우기, QR 붙이기
 
-먼저 CLAUDE.md를 읽고, 위 상태가 아직 맞는지 확인한 다음 알려줘.</pre>
+■ 작업 방식
+- 커밋은 항목별로 나눠줘. 마음에 안 드는 것만 골라 되돌릴 수 있게
+- 배포 전에 npm run build 로 타입 확인
+- 화면을 바꿨으면 실제로 띄워서 수치로 확인하고 알려줘
+- 셸에서 백틱 쓰면 명령으로 먹히니 스크립트 파일로 처리할 것
+
+먼저 CLAUDE.md 를 읽고, 위 상태가 아직 맞는지 확인한 다음 알려줘.</pre>
     </div>
   </section>
 
   <section>
     <h2>짚고 갈 것</h2>
     <div class="note">
-      <p><strong>이 사이트를 제대로 본 사람이 아직 없습니다.</strong> 작업하는 내내 브라우저 화면을 띄울 수 없어서, 구조와 좌표와 카드 픽셀은 전부 수치로만 확인했습니다. Vercel 썸네일에 마을이 그려진 건 봤지만 그게 전부입니다.</p>
-      <p>그러니 <strong>색이 촌스럽다거나 건물 그림이 어설프다거나 하는 건 아직 아무도 판단하지 않은 영역</strong>입니다. 폰으로 한번 훑어보시고 어색한 데를 알려주시면, 그게 다음 작업의 첫 항목이 되는 게 맞습니다.</p>
+      <p><strong>이 사이트를 눈으로 평가한 사람이 아직 없습니다.</strong> 작업 내내 브라우저 화면을 띄울 수 없어서, 구조·좌표·겹침·카드 픽셀은 전부 수치로만 확인했습니다. 건물이 겹치지 않는다는 것은 알지만, 예쁜지는 모릅니다.</p>
+      <p>그러니 <strong>색이 촌스럽다거나 건물 그림이 어설프다거나 하는 건 아직 아무도 판단하지 않은 영역</strong>입니다. 폰으로 한 바퀴 돌아보고 어색한 데를 알려주시면, 그게 다음 작업의 첫 항목이 되는 게 맞습니다.</p>
     </div>
   </section>
 
   <footer>
-    코딩 마을 · 2026-08-27 기준 · 저장소의 <code style="font-family:var(--f-mono)">CLAUDE.md</code>에 같은 내용이 더 자세히 들어 있습니다
+    코딩 마을 · 2026-08-28 기준 · 저장소의 <code style="font-family:var(--f-mono)">CLAUDE.md</code>에 같은 내용이 더 자세히 들어 있습니다
   </footer>
 
 </div>
