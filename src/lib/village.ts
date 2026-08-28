@@ -3,6 +3,7 @@ import data from "@/content/village.json";
 /** 건물 모양. 새 모양을 추가하려면 VillageMap.tsx의 Building에도 그림을 더한다. */
 export type PlaceKind =
   | "gate"
+  | "library"
   | "bookhouse"
   | "greenhouse"
   | "postoffice"
@@ -19,6 +20,14 @@ export type Place = {
   howto: string;
   /** 비어 있으면 「준비 중」으로 보이고 눌러도 이동하지 않는다. */
   href: string;
+  /** 들어가는 단추에 쓸 말. 없으면 「들어가기」. */
+  enter?: string;
+  /**
+   * 한 곳에 문이 둘일 때 쓰는 두 번째 단추.
+   * 행복정원처럼 「내 정원(학생용)」과 「전체 정원(전자칠판)」이 갈리는 경우.
+   * href 가 비면 단추를 아예 그리지 않는다.
+   */
+  extra?: { label: string; href: string; hint?: string };
   accent: string;
   status: PlaceStatus;
   final?: boolean;

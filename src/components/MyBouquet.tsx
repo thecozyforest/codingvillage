@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Garden } from "./Garden";
 import { FlowerHead } from "./Flower";
+import { GbNav } from "./GbNav";
 import { downloadBouquetCard } from "@/lib/card";
 import { village } from "@/lib/village";
 import type { Entry, Student } from "@/lib/gardenTypes";
@@ -95,9 +96,11 @@ export default function MyBouquet() {
     return (
       <div className="gb-wrap">
         <div className="gb-top">
-          <button className="gb-backBtn" onClick={backToList}>
-            ← 처음으로
-          </button>
+          <GbNav>
+            <button className="gb-navBtn" onClick={backToList}>
+              처음으로
+            </button>
+          </GbNav>
           <h1 className="gb-h1">{picked.name}님에게 온 꽃다발</h1>
           <p className="gb-sub">
             {entries.length > 0
@@ -140,9 +143,11 @@ export default function MyBouquet() {
     return (
       <div className="gb-wrap">
         <div className="gb-top">
-          <button className="gb-backBtn" onClick={backToList}>
-            ← 이름 다시 고르기
-          </button>
+          <GbNav>
+            <button className="gb-navBtn" onClick={backToList}>
+              이름 다시 고르기
+            </button>
+          </GbNav>
           <h1 className="gb-h1">{picked.name}님이 맞나요?</h1>
           <p className="gb-sub">
             {pinOn === false
@@ -198,9 +203,11 @@ export default function MyBouquet() {
   return (
     <div className="gb-wrap">
       <div className="gb-top">
-        <Link className="gb-back" href="/guestbook">
-          ← 꽃 우체국
-        </Link>
+        <GbNav>
+          <Link className="gb-navBtn" href="/guestbook">
+            꽃 우체국
+          </Link>
+        </GbNav>
         <h1 className="gb-h1">내 꽃다발</h1>
         <p className="gb-sub">이름을 고르면 나에게 온 꽃과 그 말을 볼 수 있어요.</p>
       </div>

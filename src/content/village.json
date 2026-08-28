@@ -8,7 +8,7 @@
       "경민T의 작은 코딩 마을",
       "스튜디오 시선 전시",
       "코딩 마을",
-      "오늘의 한 마디",
+      "마을 도서관",
       "작은 행복정원",
       "꽃 우체국"
     ],
@@ -32,18 +32,9 @@
   "guide": {
     "title": "이렇게 둘러보세요",
     "steps": [
-      {
-        "icon": "tap",
-        "text": "건물을 누르면 무엇을 하는 곳인지 알려 줘요."
-      },
-      {
-        "icon": "walk",
-        "text": "「들어가기」를 누르면 그 앱이 새 창에서 열려요."
-      },
-      {
-        "icon": "flower",
-        "text": "다 둘러봤다면 마을 끝 꽃 우체국에 들러 주세요."
-      }
+      { "icon": "tap", "text": "건물을 누르면 무엇을 하는 곳인지 알려 줘요." },
+      { "icon": "walk", "text": "들어갔다 나오면 그 건물에 도장이 찍혀요." },
+      { "icon": "flower", "text": "다 둘러봤다면 마을 끝 꽃 우체국에 들러 주세요." }
     ]
   },
   "places": [
@@ -59,13 +50,14 @@
       "status": "landmark"
     },
     {
-      "id": "quote-house",
-      "name": "오늘의 한 마디",
-      "kind": "bookhouse",
+      "id": "library",
+      "name": "마을 도서관",
+      "kind": "library",
       "theme": "힐링 · 독서",
       "blurb": "오늘 나에게 오는 문장 하나.",
-      "howto": "버튼을 누르면 오늘의 문장이 한 줄 나옵니다. 마음에 남는 문장이 나올 때까지 눌러 봐도 좋아요.",
+      "howto": "도서관에 들어가면 「오늘의 한 마디」가 기다리고 있어요. 버튼을 누르면 오늘의 문장이 한 줄 나옵니다. 마음에 남는 문장이 나올 때까지 눌러 봐도 좋아요.",
       "href": "https://script.google.com/macros/s/AKfycbwtMhbEcJfnfsqtvyfe2eGg6JPdEPmfELhFvGvBPn-eod84qIAThBA8Q71zcrPKzrTYog/exec",
+      "enter": "도서관 들어가기",
       "accent": "sun",
       "status": "open"
     },
@@ -77,6 +69,12 @@
       "blurb": "10점짜리 행복을 모으면 꽃이 핍니다.",
       "howto": "완벽하지 않아도 되는 작은 기쁨을 적어 보세요. 하나 적을 때마다 내 정원에 꽃이 한 송이 늘어납니다. 주마다 봄·여름·가을·겨울로 계절이 바뀌고, 친구 정원에 놀러 가 물을 주거나 씨앗을 나눠 줄 수도 있어요.",
       "href": "",
+      "enter": "내 정원 만들기",
+      "extra": {
+        "label": "모두의 정원 보기",
+        "href": "",
+        "hint": "온실 안 꽃을 누르면 전체 정원이 열립니다"
+      },
       "accent": "leaf",
       "status": "open"
     },
@@ -88,6 +86,12 @@
       "blurb": "친구에게 꽃 한 송이를 놓고 가세요.",
       "howto": "전시에 오신 손님이 학생 한 명을 골라 꽃 한 송이와 한 마디를 놓고 갑니다. 놓인 꽃은 그 학생의 정원과 「모두의 정원」에 함께 피어요. 전시가 끝나면 학생이 자기에게 온 꽃다발을 카드로 내려받을 수 있습니다.",
       "href": "/guestbook",
+      "enter": "꽃 놓으러 가기",
+      "extra": {
+        "label": "모두의 정원 보기",
+        "href": "/guestbook/garden",
+        "hint": "지금까지 놓인 꽃을 모두 볼 수 있어요"
+      },
       "accent": "bloom",
       "status": "open",
       "final": true

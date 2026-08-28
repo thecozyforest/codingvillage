@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Garden } from "./Garden";
 import { FlowerHead } from "./Flower";
+import { GbNav } from "./GbNav";
 import { downloadGardenCard } from "@/lib/card";
 import { village } from "@/lib/village";
 import type { Entry, Student } from "@/lib/gardenTypes";
@@ -184,9 +185,11 @@ export default function AllGarden({ board = false }: { board?: boolean }) {
   return (
     <div className="gb-wrap">
       <div className="gb-top">
-        <Link className="gb-back" href="/guestbook">
-          ← 꽃 우체국
-        </Link>
+        <GbNav>
+          <Link className="gb-navBtn" href="/guestbook">
+            꽃 우체국
+          </Link>
+        </GbNav>
         <h1 className="gb-h1">모두의 정원</h1>
         <p className="gb-sub">놓고 가신 꽃이 저마다의 정원에, 그리고 한 밭에 함께 핍니다.</p>
       </div>

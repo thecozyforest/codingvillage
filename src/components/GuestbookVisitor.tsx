@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FLOWERS } from "@/lib/flowers";
 import { village } from "@/lib/village";
 import { FlowerHead } from "./Flower";
+import { GbNav } from "./GbNav";
 
 type Student = { id: string; name: string; group: string; note?: string; flowers: number };
 
@@ -74,6 +75,7 @@ export default function GuestbookVisitor() {
   if (done) {
     return (
       <div className="gb-wrap">
+        <GbNav />
         <div className="gb-done">
           <div className="gb-doneArt" style={{ width: 108, height: 108 }}>
             <FlowerHead id={flower} size={108} />
@@ -107,9 +109,7 @@ export default function GuestbookVisitor() {
   return (
     <div className="gb-wrap">
       <div className="gb-top">
-        <Link className="gb-back" href="/">
-          ← {village.meta.siteName}
-        </Link>
+        <GbNav />
         <h1 className="gb-h1">꽃 우체국</h1>
         <p className="gb-sub">
           오늘 마을에 와 주셔서 고맙습니다. 꽃 한 송이를 골라 두고 가 주세요.

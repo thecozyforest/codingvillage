@@ -17,10 +17,12 @@ import {
   type PlaceKind,
   type Season,
 } from "@/lib/village";
+import { SeasonAir } from "./SeasonAir";
 
 const PLACES = village.places;
 const H = mapHeight(PLACES.length);
 const pct = (v: number, total: number) => `${(v / total) * 100}%`;
+const STAMP_KEY = "codingvillage-stamps";
 
 /* ── 건물 그림 ─────────────────────────────────
    viewBox는 모두 0 0 100 100 입니다. 새 건물을 그릴 때도 이 상자를 지키면
@@ -39,6 +41,31 @@ function BuildingArt({ kind }: { kind: PlaceKind }) {
         <rect x="27" y="44" width="46" height="19" rx="5" fill="#f6e2c2" stroke={woodDark} strokeWidth="2.5" />
         <circle cx="50" cy="53.5" r="4" fill="var(--cv-accent)" />
         <ellipse cx="50" cy="88" rx="42" ry="5" fill="var(--cv-grass-deep)" opacity="0.35" />
+      </>
+    );
+  }
+
+  if (kind === "library") {
+    return (
+      <>
+        {/* 계단 */}
+        <rect x="18" y="82" width="64" height="4" rx="1.5" fill="#e6dcc8" stroke={woodDark} strokeWidth="1.2" />
+        <rect x="22" y="78" width="56" height="4" rx="1.5" fill="#efe6d4" stroke={woodDark} strokeWidth="1.2" />
+        {/* 본체 */}
+        <rect x="22" y="44" width="56" height="34" fill="#fdf4e4" stroke={woodDark} strokeWidth="2" />
+        {/* 기둥 넷 */}
+        <rect x="27" y="46" width="6" height="32" rx="2" fill="#f3e8d4" stroke={woodDark} strokeWidth="1.3" />
+        <rect x="39" y="46" width="6" height="32" rx="2" fill="#f3e8d4" stroke={woodDark} strokeWidth="1.3" />
+        <rect x="55" y="46" width="6" height="32" rx="2" fill="#f3e8d4" stroke={woodDark} strokeWidth="1.3" />
+        <rect x="67" y="46" width="6" height="32" rx="2" fill="#f3e8d4" stroke={woodDark} strokeWidth="1.3" />
+        {/* 문 */}
+        <path d="M45 78 V58 a5 5 0 0 1 10 0 V78 Z" fill={wood} stroke={woodDark} strokeWidth="1.6" />
+        {/* 지붕(박공) */}
+        <path d="M14 45 L50 22 L86 45 Z" fill="var(--cv-accent)" stroke={woodDark} strokeWidth="2" strokeLinejoin="round" />
+        {/* 박공 안 펼친 책 */}
+        <path d="M42 36 q8 -3 8 0 q0 -3 8 0 v5 q-8 -3 -8 0 q0 -3 -8 0 Z" fill="#fdf4e4" stroke={woodDark} strokeWidth="1.3" strokeLinejoin="round" />
+        <path d="M50 36 V41" stroke={woodDark} strokeWidth="1" />
+        <ellipse cx="50" cy="88" rx="42" ry="4.5" fill="var(--cv-grass-deep)" opacity="0.35" />
       </>
     );
   }
@@ -173,9 +200,13 @@ function MapBackdrop() {
         );
       })}
 
-      {/* 작은 연못 */}
+      {/* 작은 연못 — 잔물결이 번져 나갑니다 */}
       <ellipse cx="300" cy={H - 128} rx="40" ry="17" fill="#bfe0ea" opacity="0.85" />
       <ellipse cx="300" cy={H - 128} rx="40" ry="17" fill="none" stroke="var(--cv-grass-deep)" strokeWidth="2" opacity="0.5" />
+      <g className="cv-ripples" style={{ transformOrigin: `300px ${H - 128}px` }}>
+        <ellipse className="cv-ripple" cx="300" cy={H - 128} rx="10" ry="4.2" fill="none" stroke="#fff" strokeWidth="1.6" />
+        <ellipse className="cv-ripple cv-ripple--b" cx="300" cy={H - 128} rx="10" ry="4.2" fill="none" stroke="#fff" strokeWidth="1.6" />
+      </g>
       <path d="M282 -8 q7 -4 13 0" transform={`translate(0 ${H - 122})`} stroke="#fff" strokeWidth="2" fill="none" opacity="0.7" />
     </svg>
   );
@@ -189,6 +220,8 @@ export default function VillageMap() {
   const [autoSeason, setAutoSeason] = useState<Season>("봄");
   const [openId, setOpenId] = useState<string | null>(null);
   const [touring, setTouring] = useState(false);
+  // 다녀간 곳 도장. 이 브라우저에만 남습니다(서버에 보내지 않습니다).
+  const [stamps, setStamps] = useState<Record<string, boolean>>({});
 
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const placeRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -198,6 +231,24 @@ export default function VillageMap() {
     const s = currentSeason();
     setSeason(s);
     setAutoSeason(s);
+    try {
+      setStamps(JSON.parse(localStorage.getItem(STAMP_KEY) || "{}"));
+    } catch {
+      /* 저장을 막아 둔 브라우저면 도장 없이 그냥 씁니다 */
+    }
+  }, []);
+
+  const stamp = useCallback((id: string) => {
+    setStamps((prev) => {
+      if (prev[id]) return prev;
+      const next = { ...prev, [id]: true };
+      try {
+        localStorage.setItem(STAMP_KEY, JSON.stringify(next));
+      } catch {
+        /* 저장 못 해도 이번 방문 동안은 찍힌 채로 보입니다 */
+      }
+      return next;
+    });
   }, []);
 
   const open = PLACES.find((p) => p.id === openId) ?? null;
@@ -232,6 +283,7 @@ export default function VillageMap() {
   }, [open, closeSheet]);
 
   const tourable = PLACES.filter((p) => statusOf(p) !== "landmark");
+  const stampedCount = tourable.filter((p) => stamps[p.id]).length;
   const tourIdx = open ? tourable.findIndex((p) => p.id === open.id) : -1;
   const next = touring && tourIdx >= 0 ? tourable[tourIdx + 1] : undefined;
 
@@ -243,6 +295,8 @@ export default function VillageMap() {
 
   return (
     <div className="cv-root" data-season={season}>
+      <SeasonAir season={season} />
+
       <header className="cv-hero cv-wrap">
         <span className="cv-eyebrow">{village.hero.eyebrow}</span>
         <h1 className="cv-title">{village.hero.title}</h1>
@@ -277,6 +331,28 @@ export default function VillageMap() {
         </p>
       </header>
 
+      <div className="cv-wrap">
+        <div className="cv-stampBar">
+          <span className="cv-stampBarLabel">마을 도장</span>
+          <span className="cv-stampDots">
+            {tourable.map((p) => (
+              <span
+                key={p.id}
+                className="cv-stampDot"
+                data-on={stamps[p.id] ? "true" : undefined}
+                title={p.name}
+              />
+            ))}
+          </span>
+          <span className="cv-stampBarCount">
+            {stampedCount} / {tourable.length}
+          </span>
+        </div>
+        {stampedCount === tourable.length && tourable.length > 0 && (
+          <p className="cv-stampDone">마을을 다 둘러보셨어요. 고맙습니다 🌸</p>
+        )}
+      </div>
+
       <div className="cv-map">
         <MapBackdrop />
 
@@ -309,6 +385,11 @@ export default function VillageMap() {
                 <svg className="cv-placeArt" viewBox="0 0 100 100" aria-hidden="true">
                   <BuildingArt kind={p.kind} />
                 </svg>
+                {stamps[p.id] && (
+                  <span className="cv-stamp" aria-hidden="true">
+                    다녀감
+                  </span>
+                )}
                 <span className={`cv-sign${st === "soon" ? " cv-signSoon" : ""}`}>{p.name}</span>
               </button>
             );
@@ -368,6 +449,20 @@ export default function VillageMap() {
               <p className="cv-soonNote">아직 문을 열지 않았어요. 곧 만나요 🌱</p>
             )}
 
+            {/* 문이 둘인 곳 — 행복정원처럼 내 정원과 전체 정원이 갈리는 경우 */}
+            {open.extra?.href && (
+              <a
+                className="cv-btn cv-btn--wide"
+                href={open.extra.href}
+                target={isExternal(open.extra.href) ? "_blank" : undefined}
+                rel={isExternal(open.extra.href) ? "noopener noreferrer" : undefined}
+                onClick={() => stamp(open.id)}
+              >
+                {open.extra.label}
+                {open.extra.hint && <small>{open.extra.hint}</small>}
+              </a>
+            )}
+
             {/* 준비 중인 곳에서도 투어가 멈추지 않도록, 「다음」은 항상 함께 둡니다. */}
             <div className="cv-sheetActions">
               {statusOf(open) === "open" && (
@@ -376,8 +471,9 @@ export default function VillageMap() {
                   href={open.href}
                   target={isExternal(open.href) ? "_blank" : undefined}
                   rel={isExternal(open.href) ? "noopener noreferrer" : undefined}
+                  onClick={() => stamp(open.id)}
                 >
-                  들어가기
+                  {open.enter ?? "들어가기"}
                 </a>
               )}
               {next ? (

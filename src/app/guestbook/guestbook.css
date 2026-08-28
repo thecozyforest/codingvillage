@@ -720,3 +720,53 @@
   border-color: var(--gb-green);
   background: #f2f8ef;
 }
+
+/* ── 이동 줄 ──────────────────────────────────
+   「마을로」는 모든 화면에 있습니다. QR로 바로 들어온 사람에게는
+   브라우저 뒤로가기가 없어서, 이게 없으면 길이 막힙니다. */
+
+.gb-nav {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 18px;
+}
+
+.gb-navBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--cv-font-body);
+  font-size: 12.5px;
+  color: var(--gb-soft);
+  background: transparent;
+  border: 1px solid var(--gb-line);
+  border-radius: 999px;
+  padding: 5px 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.gb-navBtn:hover {
+  color: var(--gb-ink);
+  border-color: var(--gb-soft);
+}
+
+.gb-navBtn--home {
+  color: var(--gb-green-dark);
+  border-color: #cfe0c4;
+  background: #f3f8f0;
+}
+
+.gb-navBtn--home:hover {
+  color: var(--gb-green-dark);
+  border-color: var(--gb-green);
+}
+
+/* 이동 줄이 생기면서 머리 여백이 겹칩니다. */
+.gb-nav + .gb-top,
+.gb-nav + .gb-done {
+  padding-top: 12px;
+}
