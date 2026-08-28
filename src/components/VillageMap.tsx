@@ -429,6 +429,14 @@ export default function VillageMap() {
   const [withDate, setWithDate] = useState(true);
   const [making, setMaking] = useState(false);
   const [nudgeHidden, setNudgeHidden] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const copyCode = useCallback((value: string) => {
+    // 복사가 막힌 브라우저에서도 코드는 화면에 그대로 보이니 손으로 옮겨 적으면 됩니다.
+    navigator.clipboard?.writeText(value).catch(() => {});
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1600);
+  }, []);
 
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const placeRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -749,6 +757,22 @@ export default function VillageMap() {
 
             <p className="cv-sheetBlurb">{open.blurb}</p>
             <p className="cv-sheetHowto">{open.howto}</p>
+
+            {/* 코드를 모르면 앱에 들어가도 막히므로 단추보다 먼저 보여 줍니다. */}
+            {open.code && statusOf(open) === "open" && (
+              <div className="cv-code">
+                <span className="cv-codeLabel">{open.code.label}</span>
+                <button
+                  className="cv-codeValue"
+                  onClick={() => copyCode(open.code!.value)}
+                  aria-label={`${open.code.label} ${open.code.value} 복사`}
+                >
+                  {open.code.value}
+                  <small>{copied ? "복사했어요" : "눌러서 복사"}</small>
+                </button>
+                {open.code.hint && <span className="cv-codeHint">{open.code.hint}</span>}
+              </div>
+            )}
 
             {statusOf(open) === "soon" && (
               <p className="cv-soonNote">아직 문을 열지 않았어요. 곧 만나요 🌱</p>

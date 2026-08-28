@@ -990,3 +990,61 @@ button {
 .cv-footer {
   padding-bottom: 96px;
 }
+
+/* ── 들어가기 전에 알아야 하는 코드 ───────────
+   학급 코드를 모르면 앱에 들어가도 첫 화면에서 막힙니다.
+   그래서 「들어가기」 단추보다 **위에**, 눈에 띄게 둡니다. */
+
+.cv-code {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0 14px;
+  padding: 14px 16px;
+  background: #f3f8ef;
+  border: 1.5px dashed #bcd6ae;
+  border-radius: var(--cv-radius);
+  text-align: center;
+}
+
+.cv-codeLabel {
+  font-size: 12.5px;
+  color: var(--cv-ink-soft);
+}
+
+.cv-codeValue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  font-family: var(--cv-font-sign);
+  font-size: clamp(30px, 9vw, 40px);
+  letter-spacing: 0.16em;
+  line-height: 1.1;
+  color: #2f6b2a;
+  text-indent: 0.16em; /* 자간 때문에 오른쪽으로 쏠리는 것을 되돌립니다 */
+}
+
+.cv-codeValue small {
+  font-family: var(--cv-font-body);
+  font-size: 11.5px;
+  letter-spacing: 0;
+  text-indent: 0;
+  color: var(--cv-ink-soft);
+  font-weight: 400;
+}
+
+.cv-codeValue:hover small {
+  color: #2f6b2a;
+}
+
+.cv-codeHint {
+  font-family: var(--cv-font-hand);
+  font-size: 15px;
+  color: var(--cv-ink-soft);
+}
