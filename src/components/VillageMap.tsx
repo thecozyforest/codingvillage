@@ -6,12 +6,12 @@ import {
   SEASONS,
   SEASON_ICON,
   currentSeason,
+  drivewayPath,
   mapHeight,
-  placeX,
+  placePoint,
   roadPath,
   scatter,
   statusOf,
-  stopY,
   village,
   type Place,
   type PlaceKind,
@@ -42,6 +42,176 @@ function BuildingArt({ kind }: { kind: PlaceKind }) {
         <rect x="27" y="44" width="46" height="19" rx="5" fill="#f6e2c2" stroke={woodDark} strokeWidth="2.5" />
         <circle cx="50" cy="53.5" r="4" fill="var(--cv-accent)" />
         <ellipse cx="50" cy="88" rx="42" ry="5" fill="var(--cv-grass-deep)" opacity="0.35" />
+      </>
+    );
+  }
+
+  if (kind === "gym") {
+    // 습관 훈련소 — 매일 드나드는 곳이라 문을 넓게, 지붕은 낮게.
+    return (
+      <>
+        <path d="M14 50 Q50 30 86 50 L86 56 Q50 36 14 56 Z" fill="var(--cv-accent)" stroke={woodDark} strokeWidth="2" strokeLinejoin="round" />
+        <rect x="18" y="54" width="64" height="32" fill="#fdf4e4" stroke={woodDark} strokeWidth="2" />
+        <rect x="38" y="62" width="24" height="24" rx="2" fill={wood} stroke={woodDark} strokeWidth="1.8" />
+        <path d="M50 62 V86" stroke={woodDark} strokeWidth="1.4" />
+        {/* 아령 간판 */}
+        <rect x="24" y="40" width="52" height="3" rx="1.5" fill={woodDark} />
+        <rect x="20" y="34" width="7" height="15" rx="2.5" fill={woodDark} />
+        <rect x="73" y="34" width="7" height="15" rx="2.5" fill={woodDark} />
+        <rect x="24" y="64" width="10" height="14" rx="2" fill="#cfe6f2" stroke={woodDark} strokeWidth="1.5" />
+        <rect x="66" y="64" width="10" height="14" rx="2" fill="#cfe6f2" stroke={woodDark} strokeWidth="1.5" />
+        <ellipse cx="50" cy="88" rx="40" ry="4.5" fill="var(--cv-grass-deep)" opacity="0.35" />
+      </>
+    );
+  }
+
+  if (kind === "drawer") {
+    // 밑줄 서랍 — 건물이 통째로 서랍장입니다.
+    return (
+      <>
+        <path d="M16 40 L50 26 L84 40 L84 46 L16 46 Z" fill="var(--cv-accent)" stroke={woodDark} strokeWidth="2" strokeLinejoin="round" />
+        <rect x="20" y="46" width="60" height="40" rx="3" fill="#f3e3c8" stroke={woodDark} strokeWidth="2" />
+        {[50, 60, 70].map((y) => (
+          <g key={y}>
+            <rect x="25" y={y} width="50" height="9" rx="2" fill="#fdf4e4" stroke={woodDark} strokeWidth="1.4" />
+            <rect x="45" y={y + 3.4} width="10" height="2.4" rx="1.2" fill={woodDark} />
+          </g>
+        ))}
+        {/* 서랍에서 삐져나온 종이 한 장 */}
+        <rect x="30" y="57.5" width="16" height="4" rx="1" fill="#fff" stroke={woodDark} strokeWidth="0.9" />
+        <path d="M32 60 H43" stroke="var(--cv-accent)" strokeWidth="1.2" />
+        <ellipse cx="50" cy="88" rx="38" ry="4.5" fill="var(--cv-grass-deep)" opacity="0.35" />
+      </>
+    );
+  }
+
+  if (kind === "lab") {
+    // 말랑문법연구소 — 삼각 플라스크 간판.
+    return (
+      <>
+        <rect x="22" y="44" width="56" height="42" rx="3" fill="#fdf4e4" stroke={woodDark} strokeWidth="2" />
+        <rect x="18" y="38" width="64" height="8" rx="3" fill="var(--cv-accent)" stroke={woodDark} strokeWidth="2" />
+        <path d="M46 20 H54 V30 L62 44 H38 L46 30 Z" fill="#dff0ea" stroke={woodDark} strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M41 38 H59 L62 44 H38 Z" fill="var(--cv-accent)" opacity="0.85" />
+        <circle cx="47" cy="34" r="1.8" fill={woodDark} opacity="0.5" />
+        <circle cx="54" cy="30" r="1.3" fill={woodDark} opacity="0.4" />
+        <rect x="28" y="52" width="16" height="14" rx="2" fill="#cfe6f2" stroke={woodDark} strokeWidth="1.6" />
+        <rect x="56" y="52" width="16" height="14" rx="2" fill="#cfe6f2" stroke={woodDark} strokeWidth="1.6" />
+        <rect x="42" y="70" width="16" height="16" rx="2" fill={wood} stroke={woodDark} strokeWidth="1.6" />
+        <ellipse cx="50" cy="88" rx="40" ry="4.5" fill="var(--cv-grass-deep)" opacity="0.35" />
+      </>
+    );
+  }
+
+  if (kind === "hanok") {
+    // 고전 이야기극장 — 처마가 살짝 들린 기와지붕.
+    return (
+      <>
+        <path
+          d="M8 44 Q18 34 30 30 Q50 24 70 30 Q82 34 92 44 Q80 41 70 40 L30 40 Q20 41 8 44 Z"
+          fill="#6b7f8c"
+          stroke={woodDark}
+          strokeWidth="1.8"
+          strokeLinejoin="round"
+        />
+        <path d="M14 44 Q50 38 86 44 L86 50 Q50 44 14 50 Z" fill="#8496a2" stroke={woodDark} strokeWidth="1.5" />
+        <rect x="22" y="50" width="56" height="34" fill="#f6ead3" stroke={woodDark} strokeWidth="1.8" />
+        {/* 창살 */}
+        <rect x="27" y="55" width="20" height="18" fill="#fdf7ea" stroke={woodDark} strokeWidth="1.4" />
+        <path d="M37 55 V73 M27 64 H47" stroke={woodDark} strokeWidth="1" />
+        <rect x="53" y="55" width="20" height="18" fill="#fdf7ea" stroke={woodDark} strokeWidth="1.4" />
+        <path d="M63 55 V73 M53 64 H73" stroke={woodDark} strokeWidth="1" />
+        <rect x="20" y="84" width="60" height="4" rx="1.5" fill={woodDark} />
+        <ellipse cx="50" cy="90" rx="40" ry="4" fill="var(--cv-grass-deep)" opacity="0.35" />
+      </>
+    );
+  }
+
+  if (kind === "clinic") {
+    // 오답 진료소 — 십자 간판.
+    return (
+      <>
+        <rect x="20" y="44" width="60" height="42" rx="4" fill="#fdf9f2" stroke={woodDark} strokeWidth="2" />
+        <path d="M14 46 L50 24 L86 46 Z" fill="#dfe9ef" stroke={woodDark} strokeWidth="2" strokeLinejoin="round" />
+        <rect x="45" y="30" width="10" height="14" rx="1.5" fill="var(--cv-accent)" />
+        <rect x="43" y="34" width="14" height="6" rx="1.5" fill="var(--cv-accent)" />
+        <rect x="27" y="52" width="18" height="14" rx="2" fill="#cfe6f2" stroke={woodDark} strokeWidth="1.6" />
+        <rect x="55" y="52" width="18" height="14" rx="2" fill="#cfe6f2" stroke={woodDark} strokeWidth="1.6" />
+        <rect x="41" y="70" width="18" height="16" rx="2" fill={wood} stroke={woodDark} strokeWidth="1.6" />
+        <ellipse cx="50" cy="88" rx="40" ry="4.5" fill="var(--cv-grass-deep)" opacity="0.35" />
+      </>
+    );
+  }
+
+  if (kind === "tower") {
+    // 진로 관제탑 — 높이 올라가 멀리 봅니다.
+    return (
+      <>
+        <path d="M40 86 L43 40 H57 L60 86 Z" fill="#fdf4e4" stroke={woodDark} strokeWidth="2" strokeLinejoin="round" />
+        <path d="M33 40 H67 L62 26 H38 Z" fill="#cfe6f2" stroke={woodDark} strokeWidth="2" strokeLinejoin="round" />
+        <path d="M38 33 H62" stroke={woodDark} strokeWidth="1.2" opacity="0.7" />
+        <path d="M50 26 V16" stroke={woodDark} strokeWidth="2" strokeLinecap="round" />
+        <circle cx="50" cy="14" r="3.4" fill="var(--cv-accent)" />
+        <rect x="44" y="56" width="12" height="10" rx="1.5" fill="#cfe6f2" stroke={woodDark} strokeWidth="1.3" />
+        <rect x="43" y="74" width="14" height="12" rx="1.5" fill={wood} stroke={woodDark} strokeWidth="1.5" />
+        <rect x="28" y="82" width="44" height="5" rx="2" fill={woodDark} opacity="0.9" />
+        <ellipse cx="50" cy="89" rx="34" ry="4" fill="var(--cv-grass-deep)" opacity="0.35" />
+      </>
+    );
+  }
+
+  if (kind === "signpost") {
+    // 진로 나침반 — 갈림길에 선 이정표.
+    return (
+      <>
+        <rect x="46" y="30" width="8" height="56" rx="3" fill={wood} stroke={woodDark} strokeWidth="1.6" />
+        <path d="M46 38 H26 L18 44 L26 50 H46 Z" fill="#f6e2c2" stroke={woodDark} strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M54 54 H74 L82 60 L74 66 H54 Z" fill="#f6e2c2" stroke={woodDark} strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M28 44 H40 M62 60 H74" stroke={woodDark} strokeWidth="1.6" strokeLinecap="round" opacity="0.6" />
+        <circle cx="50" cy="24" r="9" fill="#dff0ea" stroke={woodDark} strokeWidth="1.8" />
+        <path d="M50 18 L53 24 L50 30 L47 24 Z" fill="var(--cv-accent)" stroke={woodDark} strokeWidth="0.8" />
+        <ellipse cx="50" cy="88" rx="26" ry="4" fill="var(--cv-grass-deep)" opacity="0.35" />
+      </>
+    );
+  }
+
+  if (kind === "workshop") {
+    // 기록 공방 — 톱니 지붕(공장·작업장)과 연장 걸이.
+    return (
+      <>
+        <path
+          d="M16 52 L28 40 L28 52 L40 40 L40 52 L52 40 L52 52 L64 40 L64 52 L76 40 L76 52 L84 52 L84 58 L16 58 Z"
+          fill="var(--cv-accent)"
+          stroke={woodDark}
+          strokeWidth="1.8"
+          strokeLinejoin="round"
+        />
+        <rect x="20" y="58" width="60" height="28" fill="#fdf4e4" stroke={woodDark} strokeWidth="2" />
+        <rect x="26" y="64" width="14" height="12" rx="1.5" fill="#cfe6f2" stroke={woodDark} strokeWidth="1.4" />
+        <rect x="44" y="68" width="30" height="18" rx="2" fill={wood} stroke={woodDark} strokeWidth="1.6" />
+        {/* 작업대 위 연필 */}
+        <path d="M27 82 L38 82" stroke={woodDark} strokeWidth="2.4" strokeLinecap="round" />
+        <path d="M38 82 L41 82" stroke="var(--cv-accent)" strokeWidth="2.4" strokeLinecap="round" />
+        <ellipse cx="50" cy="88" rx="40" ry="4.5" fill="var(--cv-grass-deep)" opacity="0.35" />
+      </>
+    );
+  }
+
+  if (kind === "observatory") {
+    // 인구 전망대 — 둥근 돔.
+    return (
+      <>
+        <path d="M24 52 A26 26 0 0 1 76 52 Z" fill="#cfe6f2" stroke={woodDark} strokeWidth="2" strokeLinejoin="round" />
+        <path d="M50 26 V52" stroke={woodDark} strokeWidth="1.3" opacity="0.6" />
+        <path d="M34 34 Q50 40 66 34" stroke={woodDark} strokeWidth="1.1" fill="none" opacity="0.5" />
+        {/* 관측 창 */}
+        <path d="M44 28 L56 28 L54 44 L46 44 Z" fill="#fdf4e4" stroke={woodDark} strokeWidth="1.4" />
+        <rect x="20" y="52" width="60" height="6" rx="2" fill={woodDark} />
+        <rect x="24" y="58" width="52" height="28" fill="#fdf4e4" stroke={woodDark} strokeWidth="2" />
+        <rect x="31" y="64" width="12" height="12" rx="1.5" fill="#cfe6f2" stroke={woodDark} strokeWidth="1.4" />
+        <rect x="57" y="64" width="12" height="12" rx="1.5" fill="#cfe6f2" stroke={woodDark} strokeWidth="1.4" />
+        <rect x="44" y="72" width="12" height="14" rx="1.5" fill={wood} stroke={woodDark} strokeWidth="1.5" />
+        <ellipse cx="50" cy="88" rx="38" ry="4.5" fill="var(--cv-grass-deep)" opacity="0.35" />
       </>
     );
   }
@@ -143,7 +313,7 @@ function BuildingArt({ kind }: { kind: PlaceKind }) {
 /* ── 지도 배경 ─────────────────────────────── */
 
 function MapBackdrop() {
-  const trees = scatter(16, 20260827);
+  const trees = scatter(22, 20260828);
   const road = roadPath(PLACES.length);
 
   return (
@@ -156,23 +326,60 @@ function MapBackdrop() {
       <defs>
         <linearGradient id="cv-ground" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="var(--cv-hill)" />
-          <stop offset="0.18" stopColor="var(--cv-grass)" />
+          <stop offset="0.14" stopColor="var(--cv-grass)" />
           <stop offset="1" stopColor="var(--cv-grass)" />
         </linearGradient>
       </defs>
 
       {/* 땅 */}
       <path
-        d={`M0 54 Q90 14 180 40 Q270 66 360 26 L360 ${H} L0 ${H} Z`}
+        d={`M0 46 Q90 10 180 34 Q270 58 360 20 L360 ${H} L0 ${H} Z`}
         fill="url(#cv-ground)"
       />
-      {/* 뒤쪽 언덕 */}
-      <ellipse cx="66" cy="62" rx="86" ry="34" fill="var(--cv-hill)" opacity="0.75" />
-      <ellipse cx="292" cy="52" rx="78" ry="30" fill="var(--cv-hill)" opacity="0.6" />
+      <ellipse cx="62" cy="54" rx="84" ry="30" fill="var(--cv-hill)" opacity="0.7" />
+      <ellipse cx="296" cy="46" rx="76" ry="27" fill="var(--cv-hill)" opacity="0.55" />
 
-      {/* 길 — 흙바닥, 그 위에 밝은 길, 가운데 징검돌 */}
-      <path d={road} stroke="var(--cv-road-edge)" strokeWidth="36" fill="none" strokeLinecap="round" />
-      <path d={road} stroke="var(--cv-road)" strokeWidth="29" fill="none" strokeLinecap="round" />
+      {/* 나무 — 고리 바깥 여백에만 심습니다 */}
+      {trees.map((t, i) => {
+        const left = i % 2 === 0;
+        const x = left ? 8 + t.x * 26 : 326 + t.x * 26;
+        const y = 110 + t.y * (H - 210);
+        return (
+          <g key={i} transform={`translate(${x} ${y}) scale(${t.s * 0.9})`}>
+            <rect x="-2.2" y="-5" width="4.4" height="14" rx="2" fill="var(--cv-wood-dark)" opacity="0.9" />
+            <circle cx="0" cy="-12" r="10" fill="var(--cv-grass-deep)" />
+            <circle cx="-6" cy="-6" r="7" fill="var(--cv-grass-deep)" opacity="0.9" />
+            <circle cx="6" cy="-7" r="6.5" fill="var(--cv-grass-deep)" opacity="0.82" />
+            {t.k === 0 && <circle cx="3" cy="-16" r="2.4" fill="var(--cv-accent)" opacity="0.9" />}
+          </g>
+        );
+      })}
+
+      {/* 건물에서 큰길로 이어지는 샛길 */}
+      {PLACES.map((p, i) => (
+        <path
+          key={p.id}
+          d={drivewayPath(i, PLACES.length)}
+          stroke="var(--cv-road-edge)"
+          strokeWidth="16"
+          fill="none"
+          strokeLinecap="round"
+        />
+      ))}
+      {PLACES.map((p, i) => (
+        <path
+          key={p.id + "-in"}
+          d={drivewayPath(i, PLACES.length)}
+          stroke="var(--cv-road)"
+          strokeWidth="11"
+          fill="none"
+          strokeLinecap="round"
+        />
+      ))}
+
+      {/* 마을 한 바퀴 도는 큰길 */}
+      <path d={road} stroke="var(--cv-road-edge)" strokeWidth="36" fill="none" strokeLinejoin="round" />
+      <path d={road} stroke="var(--cv-road)" strokeWidth="29" fill="none" strokeLinejoin="round" />
       <path
         d={road}
         stroke="#fff"
@@ -180,35 +387,27 @@ function MapBackdrop() {
         fill="none"
         strokeLinecap="round"
         strokeDasharray="0.5 17"
-        opacity="0.5"
+        opacity="0.45"
       />
 
-      {/* 나무 — 길을 피해 바깥쪽에만 심습니다 */}
-      {trees.map((t, i) => {
-        const left = i % 2 === 0;
-        const x = left ? 10 + t.x * 44 : 306 + t.x * 44;
-        const y = 96 + t.y * (H - 190);
-        const s = t.s;
-        return (
-          <g key={i} transform={`translate(${x} ${y}) scale(${s})`}>
-            <rect x="-2.4" y="-6" width="4.8" height="16" rx="2" fill="var(--cv-wood-dark)" opacity="0.9" />
-            <circle cx="0" cy="-14" r="11" fill="var(--cv-grass-deep)" />
-            <circle cx="-7" cy="-7" r="8" fill="var(--cv-grass-deep)" opacity="0.92" />
-            <circle cx="7" cy="-8" r="7.5" fill="var(--cv-grass-deep)" opacity="0.85" />
-            {t.k === 0 && <circle cx="3" cy="-18" r="2.6" fill="var(--cv-accent)" opacity="0.9" />}
-            {t.k === 0 && <circle cx="-6" cy="-13" r="2" fill="var(--cv-accent)" opacity="0.75" />}
-          </g>
-        );
-      })}
-
-      {/* 작은 연못 — 잔물결이 번져 나갑니다 */}
-      <ellipse cx="300" cy={H - 128} rx="40" ry="17" fill="#bfe0ea" opacity="0.85" />
-      <ellipse cx="300" cy={H - 128} rx="40" ry="17" fill="none" stroke="var(--cv-grass-deep)" strokeWidth="2" opacity="0.5" />
-      <g className="cv-ripples" style={{ transformOrigin: `300px ${H - 128}px` }}>
-        <ellipse className="cv-ripple" cx="300" cy={H - 128} rx="10" ry="4.2" fill="none" stroke="#fff" strokeWidth="1.6" />
-        <ellipse className="cv-ripple cv-ripple--b" cx="300" cy={H - 128} rx="10" ry="4.2" fill="none" stroke="#fff" strokeWidth="1.6" />
+      {/* 고리 안쪽 마을 마당 — 연못과 우물 */}
+      <ellipse cx={MAP.width / 2} cy={H * 0.34} rx="42" ry="26" fill="#bfe0ea" opacity="0.85" />
+      <ellipse cx={MAP.width / 2} cy={H * 0.34} rx="42" ry="26" fill="none" stroke="var(--cv-grass-deep)" strokeWidth="2" opacity="0.5" />
+      <g className="cv-ripples">
+        <ellipse className="cv-ripple" cx={MAP.width / 2} cy={H * 0.34} rx="11" ry="6" fill="none" stroke="#fff" strokeWidth="1.6" />
+        <ellipse className="cv-ripple cv-ripple--b" cx={MAP.width / 2} cy={H * 0.34} rx="11" ry="6" fill="none" stroke="#fff" strokeWidth="1.6" />
       </g>
-      <path d="M282 -8 q7 -4 13 0" transform={`translate(0 ${H - 122})`} stroke="#fff" strokeWidth="2" fill="none" opacity="0.7" />
+
+      {/* 우물 */}
+      <g transform={`translate(${MAP.width / 2} ${H * 0.66})`}>
+        <ellipse cx="0" cy="14" rx="26" ry="6" fill="var(--cv-grass-deep)" opacity="0.3" />
+        <rect x="-16" y="-2" width="32" height="16" rx="3" fill="#cbb59a" stroke="var(--cv-wood-dark)" strokeWidth="1.8" />
+        <path d="M-16 2 H16 M-16 8 H16" stroke="var(--cv-wood-dark)" strokeWidth="0.9" opacity="0.5" />
+        <path d="M-13 -2 L0 -20 L13 -2" fill="none" stroke="var(--cv-wood-dark)" strokeWidth="2.4" strokeLinejoin="round" />
+        <path d="M-18 -18 H18" stroke="var(--cv-wood-dark)" strokeWidth="2.4" strokeLinecap="round" />
+        <path d="M0 -18 V-9" stroke="var(--cv-wood-dark)" strokeWidth="1.2" />
+        <rect x="-4" y="-9" width="8" height="6" rx="1.5" fill="var(--cv-wood)" stroke="var(--cv-wood-dark)" strokeWidth="1.2" />
+      </g>
     </svg>
   );
 }
@@ -432,7 +631,10 @@ export default function VillageMap() {
                 className="cv-place"
                 data-here={touring && open?.id === p.id ? "true" : undefined}
                 data-slam={slam === p.id ? "true" : undefined}
-                style={{ left: pct(placeX(i), MAP.width), top: pct(stopY(i), H) }}
+                style={{
+                  left: pct(placePoint(i, PLACES.length).x, MAP.width),
+                  top: pct(placePoint(i, PLACES.length).y, H),
+                }}
                 onClick={() => !landmark && openPlace(p)}
                 disabled={landmark}
                 aria-label={

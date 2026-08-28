@@ -7,9 +7,11 @@
     "keywords": [
       "경민T의 작은 코딩 마을",
       "스튜디오 시선 전시",
-      "코딩 마을",
       "마을 도서관",
       "작은 행복정원",
+      "습관 훈련소",
+      "밑줄 서랍",
+      "진로 관제탑",
       "꽃 우체국"
     ],
     "exhibition": "스튜디오 시선 전시",
@@ -23,8 +25,8 @@
     "title": "경민T의 작은 코딩 마을에\n오신 걸 환영해요",
     "lines": [
       "여기는 사람과 사람이 이어지는 마을입니다.",
-      "길을 따라 천천히 올라가며 한 곳씩 들러 보세요.",
-      "마지막 집에서는 친구에게 꽃 한 송이를 보낼 수 있어요."
+      "마을길을 한 바퀴 돌며 들르고 싶은 곳에 들어가 보세요.",
+      "마지막 꽃 우체국에서는 친구에게 꽃 한 송이를 놓고 갈 수 있어요."
     ],
     "cta": "마을 둘러보기",
     "tourCta": "마을 투어 시작"
@@ -42,7 +44,7 @@
       },
       {
         "icon": "flower",
-        "text": "다 둘러봤다면 마을 끝 꽃 우체국에 들러 주세요."
+        "text": "다 돌지 않아도 괜찮아요. 마음이 가는 곳만 들러도 돼요."
       }
     ]
   },
@@ -85,6 +87,114 @@
         "hint": "전자칠판 화면이 새 창에서 열려요"
       },
       "accent": "leaf",
+      "status": "open"
+    },
+    {
+      "id": "habit",
+      "name": "습관 훈련소",
+      "kind": "gym",
+      "theme": "마음 챙기기",
+      "blurb": "작은 습관 하나를 매일 체크해요.",
+      "howto": "학급 코드를 넣고 이름과 습관 목표를 정해 등록하면, 그다음부터 매일 들어와 「오늘 체크하기」를 누르는 곳입니다. 하루치가 쌓이는 걸 눈으로 보게 됩니다.",
+      "href": "https://script.google.com/macros/s/AKfycbzqVhTmpKoGMOEy1OgVobAXEZxXHrNSmtVe4YPRdxy2shNR5zDqJyvH6xHjJF3UNG8Onw/exec",
+      "enter": "훈련소 들어가기",
+      "accent": "leaf",
+      "status": "open"
+    },
+    {
+      "id": "underline",
+      "name": "밑줄 서랍",
+      "kind": "drawer",
+      "theme": "힐링 · 독서",
+      "blurb": "마음에 걸린 문장을 넣어 두는 서랍.",
+      "howto": "책을 읽다 밑줄 친 문장을 넣어 두면 서랍에 차곡차곡 쌓입니다. 나중에 열어 보면 그때 무엇에 마음이 걸렸는지가 남아 있어요.",
+      "href": "https://script.google.com/macros/s/AKfycbxP5jGdfnEZsB_oBRJ9XrpV25ZFnoAiXjO_5dVJq2m3kbuwFK-K6ERtXXwyz17S1RxD/exec",
+      "enter": "서랍 열어 보기",
+      "accent": "sun",
+      "status": "open"
+    },
+    {
+      "id": "grammar-lab",
+      "name": "말랑문법연구소",
+      "kind": "lab",
+      "theme": "배움 · 국어",
+      "blurb": "딱딱한 문법을 말랑하게.",
+      "howto": "헷갈리는 문법을 눌러 가며 확인하는 연구소입니다. 외우지 않고 만져 보면서 익힙니다.",
+      "href": "https://thecozyforest.github.io/population/korean-grammar-lab/",
+      "enter": "연구소 들어가기",
+      "accent": "leaf",
+      "status": "open"
+    },
+    {
+      "id": "classics",
+      "name": "고전 이야기극장",
+      "kind": "hanok",
+      "theme": "배움 · 국어",
+      "blurb": "고전소설 속으로 들어가 봐요.",
+      "howto": "고전소설의 인물과 이야기를 눌러 가며 따라가는 곳입니다. 줄거리를 외우는 대신 안으로 들어가 봅니다.",
+      "href": "https://thecozyforest.github.io/dochis-warehouse/korean-classics-chatbot/",
+      "enter": "극장 들어가기",
+      "accent": "bloom",
+      "status": "open"
+    },
+    {
+      "id": "error-clinic",
+      "name": "오답 진료소",
+      "kind": "clinic",
+      "theme": "배움 · 국어",
+      "blurb": "틀린 문제에도 버릇이 있어요.",
+      "howto": "국어 오답을 유형별로 기록하면 어디서 자꾸 걸리는지가 보입니다. 틀린 개수가 아니라 틀리는 자리를 찾는 곳입니다.",
+      "href": "https://thecozyforest.github.io/dochis-warehouse/Korean_Error_Pattern_Tracker/",
+      "enter": "진료소 들어가기",
+      "accent": "sun",
+      "status": "open"
+    },
+    {
+      "id": "career-control",
+      "name": "진로 관제탑",
+      "kind": "tower",
+      "theme": "진로",
+      "blurb": "진로를 한눈에 내려다보는 곳.",
+      "howto": "흩어져 있는 진로 정보를 한 화면에 모아 보는 관제탑입니다. 높은 데서 보면 길이 보입니다.",
+      "href": "https://thecozyforest.github.io/dochis-warehouse/career-control/",
+      "enter": "관제탑 오르기",
+      "accent": "wood",
+      "status": "open"
+    },
+    {
+      "id": "compass",
+      "name": "진로 나침반",
+      "kind": "signpost",
+      "theme": "진로",
+      "blurb": "고른 과목이 가리키는 방향.",
+      "howto": "선택과목을 넣으면 그 조합이 어느 쪽을 가리키는지 보여 줍니다. 갈림길에서 방향을 재 보는 이정표예요.",
+      "href": "https://thecozyforest.github.io/dochis-warehouse/Student_Career_Compass/",
+      "enter": "방향 재 보기",
+      "accent": "leaf",
+      "status": "open"
+    },
+    {
+      "id": "portfolio",
+      "name": "기록 공방",
+      "kind": "workshop",
+      "theme": "진로 · 기록",
+      "blurb": "한 활동을 기록으로 벼려내는 작업대.",
+      "howto": "창의적 체험활동을 어떻게 적을지 막힐 때 들르는 공방입니다. 했던 일을 남는 기록으로 다듬어 줍니다.",
+      "href": "https://thecozyforest.github.io/dochis-warehouse/Inquiry_Portfolio_Assistant/",
+      "enter": "공방 들어가기",
+      "accent": "wood",
+      "status": "open"
+    },
+    {
+      "id": "population",
+      "name": "인구 전망대",
+      "kind": "observatory",
+      "theme": "탐구",
+      "blurb": "우리 동네는 어떻게 변해 왔을까.",
+      "howto": "지역 인구가 어떻게 움직였는지 눌러 가며 살펴보는 전망대입니다. 숫자가 우리 동네 이야기가 됩니다.",
+      "href": "https://thecozyforest.github.io/population/",
+      "enter": "전망대 오르기",
+      "accent": "bloom",
       "status": "open"
     },
     {
