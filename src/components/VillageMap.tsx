@@ -428,6 +428,7 @@ export default function VillageMap() {
   const [cardName, setCardName] = useState("");
   const [withDate, setWithDate] = useState(true);
   const [making, setMaking] = useState(false);
+  const [nudgeHidden, setNudgeHidden] = useState(false);
 
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const placeRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -500,6 +501,9 @@ export default function VillageMap() {
   // 도장은 **문이 열린 곳만** 셉니다. 「준비 중」인 곳은 들어갈 수가 없어서
   // 분모에 넣으면 아무도 도장판을 채울 수 없습니다.
   const stampable = PLACES.filter((p) => statusOf(p) === 'open');
+  // 방명록은 「구경」이 아니라 「하고 가는 것」이라, 다른 곳과 무게를 달리 둡니다.
+  const mustDo = PLACES.find((p) => p.final && statusOf(p) === 'open');
+  const mustDoLeft = !!mustDo && !stamps[mustDo.id];
   const stampedCount = stampable.filter((p) => stamps[p.id]).length;
   const tourIdx = open ? tourable.findIndex((p) => p.id === open.id) : -1;
   const next = touring && tourIdx >= 0 ? tourable[tourIdx + 1] : undefined;
@@ -637,6 +641,7 @@ export default function VillageMap() {
                 className="cv-place"
                 data-here={touring && open?.id === p.id ? "true" : undefined}
                 data-slam={slam === p.id ? "true" : undefined}
+                data-must={p.final && statusOf(p) === "open" ? "true" : undefined}
                 style={{
                   left: pct(placePoint(i, PLACES.length).x, MAP.width),
                   top: pct(placePoint(i, PLACES.length).y, H),
@@ -663,6 +668,7 @@ export default function VillageMap() {
                   </span>
                 )}
                 <span className={`cv-sign${st === "soon" ? " cv-signSoon" : ""}`}>{p.name}</span>
+                {p.badge && <span className="cv-badge">{p.badge}</span>}
               </button>
             );
           })}
@@ -689,6 +695,29 @@ export default function VillageMap() {
         <p className="cv-footerNote">{village.footer.note}</p>
         <p className="cv-footerCredit">{village.footer.credit}</p>
       </footer>
+
+      {/* 방명록을 아직 안 쓴 사람에게만 뜨는 띠. 쓰고 나면 사라집니다. */}
+      {mustDo && mustDoLeft && !nudgeHidden && !open && (
+        <div className="cv-nudge" role="complementary">
+          <div className="cv-nudgeText">
+            <strong>방명록을 아직 안 쓰셨어요</strong>
+            <span>다른 곳은 구경만 해도 괜찮아요</span>
+          </div>
+          <button
+            className="cv-nudgeGo"
+            onClick={() => {
+              const el = placeRefs.current[mustDo.id];
+              el?.scrollIntoView({ behavior: "smooth", block: "center" });
+              openPlace(mustDo);
+            }}
+          >
+            꽃 놓으러 가기
+          </button>
+          <button className="cv-nudgeClose" onClick={() => setNudgeHidden(true)} aria-label="이 안내 닫기">
+            ✕
+          </button>
+        </div>
+      )}
 
       {open && (
         <>

@@ -874,3 +874,119 @@ button {
   accent-color: var(--cv-accent-ink);
   cursor: pointer;
 }
+
+/* ── 꼭 들러야 하는 곳 ─────────────────────────
+   다른 건물은 구경만 해도 되지만 방명록은 하고 가는 것이라,
+   일부러 무게를 다르게 줍니다. 「건물은 모두 같은 크기」 규칙의 예외입니다. */
+
+.cv-place[data-must="true"] .cv-placeArt {
+  filter: drop-shadow(0 6px 10px rgba(90, 68, 50, 0.28))
+    drop-shadow(0 0 12px rgba(255, 255, 255, 0.75));
+  transform: scale(1.14);
+}
+
+.cv-place[data-must="true"]:hover .cv-placeArt,
+.cv-place[data-must="true"]:focus-visible .cv-placeArt {
+  transform: translateY(-5px) scale(1.18);
+}
+
+.cv-place[data-must="true"] .cv-sign {
+  background: linear-gradient(180deg, #ffe9c4, #f6d199);
+  border-color: #8a5a2b;
+  box-shadow: 0 3px 0 #8a5a2b, 0 6px 12px rgba(90, 68, 50, 0.22);
+}
+
+/* 간판 아래 딱지 — 이름만으로 무엇인지 모를 때 */
+.cv-badge {
+  margin-top: 3px;
+  font-size: clamp(9px, 2.3vw, 11px);
+  letter-spacing: 0.03em;
+  color: #fff;
+  background: var(--cv-accent-ink);
+  border-radius: 999px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(90, 68, 50, 0.22);
+}
+
+/* ── 아래 고정 띠 ─────────────────────────────
+   방명록을 아직 안 쓴 사람에게만 뜨고, 쓰고 나면 저절로 사라집니다.
+   시트가 열려 있을 때는 가려지지 않게 숨깁니다. */
+
+.cv-nudge {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: min(100%, var(--cv-max));
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(255, 253, 248, 0.97);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid var(--cv-line);
+  box-shadow: 0 -6px 20px rgba(96, 74, 56, 0.14);
+  animation: cv-nudgeIn 420ms cubic-bezier(0.2, 0.9, 0.3, 1.05);
+}
+
+@keyframes cv-nudgeIn {
+  from {
+    transform: translate(-50%, 100%);
+  }
+}
+
+.cv-nudgeText {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.35;
+}
+
+.cv-nudgeText strong {
+  font-family: var(--cv-font-sign);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--cv-ink);
+}
+
+.cv-nudgeText span {
+  font-size: 11.5px;
+  color: var(--cv-ink-soft);
+}
+
+.cv-nudgeGo {
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-family: var(--cv-font-sign);
+  font-size: 14px;
+  background: var(--cv-accent);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(96, 74, 56, 0.2);
+}
+
+.cv-root[data-season="가을"] .cv-nudgeGo,
+.cv-root[data-season="여름"] .cv-nudgeGo {
+  color: #4a3218;
+}
+
+.cv-nudgeClose {
+  flex: 0 0 auto;
+  border: 0;
+  background: none;
+  color: var(--cv-ink-soft);
+  font-size: 15px;
+  line-height: 1;
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* 띠에 가려 마지막 내용이 안 보이지 않도록 */
+.cv-footer {
+  padding-bottom: 96px;
+}
