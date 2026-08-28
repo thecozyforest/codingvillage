@@ -1048,3 +1048,58 @@ button {
   font-size: 15px;
   color: var(--cv-ink-soft);
 }
+
+/* ── 도장 비우기 ──────────────────────────────
+   전시 부스에서 기기 하나를 여러 사람이 쓸 때 필요합니다.
+   한창 도는 중에 잘못 눌리면 곤란하므로 조용하게 두고, 한 번 물어봅니다. */
+
+.cv-resetOpen {
+  align-self: center;
+  border: 0;
+  background: none;
+  color: var(--cv-ink-soft);
+  font-size: 12.5px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  padding: 4px 8px;
+  opacity: 0.75;
+}
+
+.cv-resetOpen:hover {
+  opacity: 1;
+  color: var(--cv-ink);
+}
+
+.cv-reset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.035);
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--cv-ink);
+}
+
+.cv-resetYes,
+.cv-resetNo {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.cv-resetYes {
+  background: #b8463f;
+  color: #fff;
+}
+
+.cv-resetNo {
+  background: transparent;
+  color: var(--cv-ink-soft);
+  box-shadow: inset 0 0 0 1.5px var(--cv-line);
+}

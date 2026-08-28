@@ -430,6 +430,25 @@ export default function VillageMap() {
   const [making, setMaking] = useState(false);
   const [nudgeHidden, setNudgeHidden] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [askReset, setAskReset] = useState(false);
+
+  /**
+   * 전시 부스에서 태블릿 하나를 여러 사람이 돌려 쓰면 다음 손님이 앞사람
+   * 도장을 보게 됩니다. 그때 비우는 단추입니다.
+   * 한 번에 지워지지 않게 물어본 뒤 지웁니다 — 한창 도는 중에 잘못 눌리면
+   * 그때까지 걸은 게 사라지니까요.
+   */
+  const resetStamps = useCallback(() => {
+    setStamps({});
+    setAskReset(false);
+    setNudgeHidden(false);
+    setCardName("");
+    try {
+      localStorage.removeItem(STAMP_KEY);
+    } catch {
+      /* 저장을 막아 둔 브라우저면 애초에 쌓인 것도 없습니다 */
+    }
+  }, []);
 
   const copyCode = useCallback((value: string) => {
     // 복사가 막힌 브라우저에서도 코드는 화면에 그대로 보이니 손으로 옮겨 적으면 됩니다.
@@ -630,6 +649,23 @@ export default function VillageMap() {
           >
             {making ? "만드는 중…" : "도장판 내려받기"}
           </button>
+
+          {stampedCount > 0 &&
+            (askReset ? (
+              <div className="cv-reset" role="group" aria-label="도장 비우기 확인">
+                <span>도장 {stampedCount}개를 모두 지울까요?</span>
+                <button className="cv-resetYes" onClick={resetStamps}>
+                  지우기
+                </button>
+                <button className="cv-resetNo" onClick={() => setAskReset(false)}>
+                  그만두기
+                </button>
+              </div>
+            ) : (
+              <button className="cv-resetOpen" onClick={() => setAskReset(true)}>
+                도장판 비우고 처음부터
+              </button>
+            ))}
         </div>
       </div>
 
