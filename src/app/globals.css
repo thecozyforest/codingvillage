@@ -594,17 +594,76 @@ button {
   animation: cv-stampIn 420ms cubic-bezier(0.2, 0.9, 0.3, 1.5);
 }
 
+/* 위에서 크게 내려와 눌러 찍히고, 한 번 튕겼다가 자리를 잡습니다. */
 @keyframes cv-stampIn {
   0% {
-    transform: rotate(-14deg) scale(2.2);
+    transform: rotate(-38deg) scale(3.4);
     opacity: 0;
   }
-  60% {
-    transform: rotate(-14deg) scale(0.92);
+  30% {
+    opacity: 0.9;
+  }
+  52% {
+    transform: rotate(-14deg) scale(0.82);
     opacity: 1;
+  }
+  68% {
+    transform: rotate(-14deg) scale(1.12);
+  }
+  84% {
+    transform: rotate(-14deg) scale(0.96);
   }
   100% {
     transform: rotate(-14deg) scale(1);
+  }
+}
+
+/* 찍힌 자리에서 번지는 잉크 자국 */
+.cv-stamp::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 999px;
+  border: 2px solid #b8463f;
+  opacity: 0;
+  animation: cv-stampRing 700ms ease-out;
+  pointer-events: none;
+}
+
+@keyframes cv-stampRing {
+  0% {
+    transform: scale(0.55);
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+/* 도장을 맞은 건물이 한 번 눌렸다 펴집니다. */
+.cv-place[data-slam="true"] .cv-placeArt {
+  animation: cv-slam 520ms cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+@keyframes cv-slam {
+  0% {
+    transform: translateY(0) scale(1, 1);
+  }
+  20% {
+    transform: translateY(5px) scale(1.06, 0.92);
+  }
+  48% {
+    transform: translateY(-3px) scale(0.97, 1.04);
+  }
+  75% {
+    transform: translateY(1px) scale(1.01, 0.99);
+  }
+  100% {
+    transform: translateY(0) scale(1, 1);
   }
 }
 
@@ -724,4 +783,94 @@ button {
     transform: scale(3.4);
     opacity: 0;
   }
+}
+
+/* ── 시트 안 「지도로」 ────────────────────────
+   투어 중에는 「다음 →」만 있어서 빠져나갈 길이 없었습니다. */
+
+.cv-sheetHome {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  border: 1px solid var(--cv-line);
+  background: transparent;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  color: var(--cv-ink-soft);
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.cv-sheetHome:hover {
+  color: var(--cv-ink);
+  border-color: var(--cv-ink-soft);
+}
+
+/* ── 완주 카드 ────────────────────────────────
+   이름과 날짜는 넣고 싶은 사람만 넣습니다. 아이들 이름이 담긴 이미지가
+   돌아다니지 않도록 이름은 비워 둔 상태에서 시작합니다. */
+
+.cv-finish {
+  margin-top: 12px;
+  background: var(--cv-card);
+  border: 1px solid var(--cv-line);
+  border-radius: var(--cv-radius);
+  padding: 16px 18px 18px;
+  box-shadow: var(--cv-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cv-finish .cv-stampDone {
+  margin: 0;
+}
+
+.cv-finishField {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cv-finishField span {
+  font-size: 13px;
+  color: var(--cv-ink-soft);
+}
+
+.cv-finishField em {
+  font-style: normal;
+  opacity: 0.75;
+}
+
+.cv-finishInput {
+  width: 100%;
+  border: 1.5px solid var(--cv-line);
+  border-radius: 12px;
+  background: #fff;
+  padding: 11px 13px;
+  font: inherit;
+  font-size: 16px; /* 16px 밑이면 iOS에서 입력할 때 화면이 확대됩니다 */
+  color: var(--cv-ink);
+}
+
+.cv-finishInput:focus {
+  outline: none;
+  border-color: var(--cv-accent-ink);
+}
+
+.cv-finishCheck {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--cv-ink);
+  cursor: pointer;
+}
+
+.cv-finishCheck input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--cv-accent-ink);
+  cursor: pointer;
 }

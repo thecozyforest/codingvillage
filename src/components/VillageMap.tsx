@@ -18,6 +18,7 @@ import {
   type Season,
 } from "@/lib/village";
 import { SeasonAir } from "./SeasonAir";
+import { downloadStampCard } from "@/lib/stampCard";
 
 const PLACES = village.places;
 const H = mapHeight(PLACES.length);
@@ -222,6 +223,12 @@ export default function VillageMap() {
   const [touring, setTouring] = useState(false);
   // 다녀간 곳 도장. 이 브라우저에만 남습니다(서버에 보내지 않습니다).
   const [stamps, setStamps] = useState<Record<string, boolean>>({});
+  // 도장은 시트 뒤에서 찍히므로, 시트를 닫는 순간에 「쾅」을 터뜨립니다.
+  const [slam, setSlam] = useState<string | null>(null);
+  const pendingSlam = useRef<string | null>(null);
+  const [cardName, setCardName] = useState("");
+  const [withDate, setWithDate] = useState(true);
+  const [making, setMaking] = useState(false);
 
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const placeRefs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -241,6 +248,7 @@ export default function VillageMap() {
   const stamp = useCallback((id: string) => {
     setStamps((prev) => {
       if (prev[id]) return prev;
+      pendingSlam.current = id;
       const next = { ...prev, [id]: true };
       try {
         localStorage.setItem(STAMP_KEY, JSON.stringify(next));
@@ -257,6 +265,13 @@ export default function VillageMap() {
     setOpenId(null);
     setTouring(false);
     lastFocus.current?.focus();
+    // 시트에 가려 안 보이던 도장을, 지도가 드러나는 지금 찍습니다.
+    if (pendingSlam.current) {
+      const id = pendingSlam.current;
+      pendingSlam.current = null;
+      setSlam(id);
+      setTimeout(() => setSlam(null), 900);
+    }
   }, []);
 
   const openPlace = useCallback((p: Place, viaTour = false) => {
@@ -283,7 +298,10 @@ export default function VillageMap() {
   }, [open, closeSheet]);
 
   const tourable = PLACES.filter((p) => statusOf(p) !== "landmark");
-  const stampedCount = tourable.filter((p) => stamps[p.id]).length;
+  // 도장은 **문이 열린 곳만** 셉니다. 「준비 중」인 곳은 들어갈 수가 없어서
+  // 분모에 넣으면 아무도 도장판을 채울 수 없습니다.
+  const stampable = PLACES.filter((p) => statusOf(p) === 'open');
+  const stampedCount = stampable.filter((p) => stamps[p.id]).length;
   const tourIdx = open ? tourable.findIndex((p) => p.id === open.id) : -1;
   const next = touring && tourIdx >= 0 ? tourable[tourIdx + 1] : undefined;
 
@@ -335,7 +353,7 @@ export default function VillageMap() {
         <div className="cv-stampBar">
           <span className="cv-stampBarLabel">마을 도장</span>
           <span className="cv-stampDots">
-            {tourable.map((p) => (
+            {stampable.map((p) => (
               <span
                 key={p.id}
                 className="cv-stampDot"
@@ -345,11 +363,56 @@ export default function VillageMap() {
             ))}
           </span>
           <span className="cv-stampBarCount">
-            {stampedCount} / {tourable.length}
+            {stampedCount} / {stampable.length}
           </span>
         </div>
-        {stampedCount === tourable.length && tourable.length > 0 && (
-          <p className="cv-stampDone">마을을 다 둘러보셨어요. 고맙습니다 🌸</p>
+        {stampedCount === stampable.length && stampable.length > 0 && (
+          <div className="cv-finish">
+            <p className="cv-stampDone">마을을 다 둘러보셨어요. 고맙습니다 🌸</p>
+
+            <label className="cv-finishField">
+              <span>
+                이름 <em>(안 적어도 괜찮아요)</em>
+              </span>
+              <input
+                className="cv-finishInput"
+                value={cardName}
+                maxLength={12}
+                onChange={(e) => setCardName(e.target.value)}
+                placeholder="비워 두면 이름 없이 나와요"
+              />
+            </label>
+
+            <label className="cv-finishCheck">
+              <input
+                type="checkbox"
+                checked={withDate}
+                onChange={(e) => setWithDate(e.target.checked)}
+              />
+              오늘 날짜 넣기
+            </label>
+
+            <button
+              className="cv-btn cv-btn--go"
+              disabled={making}
+              onClick={async () => {
+                setMaking(true);
+                try {
+                  await downloadStampCard({
+                    villageName: village.meta.siteName,
+                    exhibitionName: village.meta.exhibition,
+                    places: stampable.map((p) => p.name),
+                    name: cardName.trim() || undefined,
+                    withDate,
+                  });
+                } finally {
+                  setMaking(false);
+                }
+              }}
+            >
+              {making ? "만드는 중…" : "완주 카드 내려받기"}
+            </button>
+          </div>
         )}
       </div>
 
@@ -368,6 +431,7 @@ export default function VillageMap() {
                 }}
                 className="cv-place"
                 data-here={touring && open?.id === p.id ? "true" : undefined}
+                data-slam={slam === p.id ? "true" : undefined}
                 style={{ left: pct(placeX(i), MAP.width), top: pct(stopY(i), H) }}
                 onClick={() => !landmark && openPlace(p)}
                 disabled={landmark}
@@ -430,6 +494,10 @@ export default function VillageMap() {
             ref={sheetRef}
           >
             <div className="cv-grip" />
+            {/* 투어 중에도 언제든 지도로 빠져나갈 수 있어야 합니다. */}
+            <button className="cv-sheetHome" onClick={closeSheet}>
+              지도로
+            </button>
             <div className="cv-sheetHead">
               <svg className="cv-sheetArt" viewBox="0 0 100 100" aria-hidden="true">
                 <BuildingArt kind={open.kind} />
