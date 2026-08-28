@@ -32,9 +32,18 @@
   "guide": {
     "title": "이렇게 둘러보세요",
     "steps": [
-      { "icon": "tap", "text": "건물을 누르면 무엇을 하는 곳인지 알려 줘요." },
-      { "icon": "walk", "text": "들어갔다 나오면 그 건물에 도장이 찍혀요." },
-      { "icon": "flower", "text": "다 둘러봤다면 마을 끝 꽃 우체국에 들러 주세요." }
+      {
+        "icon": "tap",
+        "text": "건물을 누르면 무엇을 하는 곳인지 알려 줘요."
+      },
+      {
+        "icon": "walk",
+        "text": "들어갔다 나오면 그 건물에 도장이 찍혀요."
+      },
+      {
+        "icon": "flower",
+        "text": "다 둘러봤다면 마을 끝 꽃 우체국에 들러 주세요."
+      }
     ]
   },
   "places": [
@@ -68,12 +77,12 @@
       "theme": "마음 챙기기",
       "blurb": "10점짜리 행복을 모으면 꽃이 핍니다.",
       "howto": "완벽하지 않아도 되는 작은 기쁨을 적어 보세요. 하나 적을 때마다 내 정원에 꽃이 한 송이 늘어납니다. 주마다 봄·여름·가을·겨울로 계절이 바뀌고, 친구 정원에 놀러 가 물을 주거나 씨앗을 나눠 줄 수도 있어요.",
-      "href": "",
+      "href": "https://script.google.com/macros/s/AKfycbxetmf7g4eR8AMvkF47pYGtdDHwN2X1lAD21eWo3iHRcZO5ySZ-W59N2dOhyixdhUyZ/exec",
       "enter": "내 정원 만들기",
       "extra": {
         "label": "모두의 정원 보기",
-        "href": "",
-        "hint": "온실 안 꽃을 누르면 전체 정원이 열립니다"
+        "href": "https://script.google.com/macros/s/AKfycbxetmf7g4eR8AMvkF47pYGtdDHwN2X1lAD21eWo3iHRcZO5ySZ-W59N2dOhyixdhUyZ/exec?page=board",
+        "hint": "전자칠판 화면이 새 창에서 열려요"
       },
       "accent": "leaf",
       "status": "open"
